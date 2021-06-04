@@ -1,13 +1,97 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RegistroEmpresa extends StatelessWidget {
+class RegistroEmpresa extends StatefulWidget {
   final String data;
   const RegistroEmpresa({Key key, this.data}) : super(key: key);
+  @override
+  _RegistroEmpresaState createState() => _RegistroEmpresaState();
+}
+
+class _RegistroEmpresaState extends State<RegistroEmpresa> {
+  bool _passwordVisible;
+  bool _passwordVisible2;
+  List<String> _distritos = [
+    'Ancón',
+    'Ate Vitarte',
+    'Barranco',
+    'Breña',
+    'Carabayllo',
+    'Chaclacayo',
+    'Chorrillos',
+    'Cieneguilla',
+    'Comas',
+    'El Agustino',
+    'Independencia',
+    'Jesús María',
+    'La Molina',
+    'La Victoria',
+    'Cercado de Lima',
+    'Lince',
+    'Los Olivos',
+    'Lurigancho',
+    'Lurín',
+    'Magdalena del Mar',
+    'Miraflores',
+    'Pachacamac',
+    'Pucusana',
+    'Pueblo Libre',
+    'Puente Piedra',
+    'Punta Hermosa',
+    'Punta Negra',
+    'Rímac',
+    'San Bartolo',
+    'San Borja',
+    'San Isidro',
+    'San Juan de Lurigancho',
+    'San Juan de Miraflores',
+    'San Luis',
+    'San Martín de Porres',
+    'San Miguel',
+    'Santa Anita',
+    'Santa María del Mar',
+    'Santa Rosa',
+    'Santiago de Surco',
+    'Surquillo',
+    'Villa El Salvador',
+    'Villa María del Triunfo'
+  ];
+  String _distrito = "";
+
+  bool _checked;
+
+  final _formRegistroEmpresa = GlobalKey<FormState>();
+  TextEditingController nombre;
+  TextEditingController razon;
+  TextEditingController correo;
+  TextEditingController ruc;
+  TextEditingController direccion;
+  TextEditingController interior;
+  TextEditingController celular;
+  TextEditingController pass1;
+  TextEditingController pass2;
+  @override
+  void initState() {
+    _passwordVisible = false;
+    _passwordVisible2 = false;
+    _checked = false;
+    nombre = new TextEditingController();
+    razon = new TextEditingController();
+    correo = new TextEditingController();
+    ruc = new TextEditingController();
+    direccion = new TextEditingController();
+    interior = new TextEditingController();
+    celular = new TextEditingController();
+    pass1 = new TextEditingController();
+    pass2 = new TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +99,7 @@ class RegistroEmpresa extends StatelessWidget {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: Text(
-          data,
+          widget.data,
           style: TextStyle(
             color: kPrimaryColor,
           ),
@@ -34,302 +118,400 @@ class RegistroEmpresa extends StatelessWidget {
           )
         ],
       ),
-      body: MyCustomForm(),
-    );
-  }
-}
-
-
-class MyCustomForm extends StatefulWidget {
-  @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
-  }
-}
-
-// Crea una clase State correspondiente. Esta clase contendrá los datos relacionados con
-// el formulario.
-class MyCustomFormState extends State<MyCustomForm> {
-  // Crea una clave global que identificará de manera única el widget Form
-  // y nos permita validar el formulario
-  //
-  // Nota: Esto es un GlobalKey<FormState>, no un GlobalKey<MyCustomFormState>!
-  final _formKey = GlobalKey<FormState>();
-  bool _checked;
-  @override
-  void initState() {
-    _checked = false;
-    super.initState();
-  }
-  final TextEditingController nombre_empresa = new TextEditingController();
-  final TextEditingController razon_empresa = new TextEditingController();
-  final TextEditingController correo_empresa = new TextEditingController();
-  final TextEditingController ruc_empresa = new TextEditingController();
-  final TextEditingController direccion_empresa = new TextEditingController();
-  final TextEditingController interior_empresa = new TextEditingController();
-  final TextEditingController celular_empresa = new TextEditingController();
-  final TextEditingController pass1_empresa = new TextEditingController();
-  final TextEditingController pass2_empresa = new TextEditingController();
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    // Crea un widget Form usando el _formKey que creamos anteriormente
-    return Form(
-      key: _formKey,
-      child: ListView(
-        children: <Widget>[
-          Container(
-            height: 200,
-            margin: EdgeInsets.all(50.0),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fitHeight,
-                image: AssetImage(
-                  "assets/icons/icon_empresa.png",
-
-                )
-              )
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 40),
+          child: Form(
+            key: _formRegistroEmpresa,
+            child: Column(
+              children: <Widget>[
+                Image.asset(
+                  "assets/icons/market_icon.png",
+                  width: 200,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 7,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: TextFormField(
+                          controller: nombre,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "NOMBRE COMERCIAL",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' :RegExp(r'[!@.°{}©®™✓%•√π÷×¶∆£¢€¥$#<>?":_`~;[\]\\|=+)(*&^%0-9]').hasMatch(value)? 'Nombre no válido':null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 5,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: ruc,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "RUC",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=11?'Son 11 Dígitos':null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: razon,
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryColor),
+                    ),
+                    hintText: "RAZÓN SOCIAL",
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
+                  validator: (value) {
+                    return value.isEmpty ?  'Campo Obligatorio' :RegExp(r'[!@°{}©®™✓%•√π÷×¶∆£¢€¥$#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value)? 'Nombre no válido':null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 8,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: TextFormField(
+                          controller: direccion,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "DIRECCIÓN",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 4,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: interior,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "Int.(opcional)",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    iconSize: 40,
+                    iconEnabledColor: kPrimaryColor,
+                    value: _distrito == "" ? null : _distrito,
+                    items: _distritos.map((String value) {
+                      return new DropdownMenuItem<String>(
+                        value: value,
+                        child: Center(
+                          child: Text(
+                            value,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: kPrimaryColor),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _distrito = newValue;
+                      });
+                    },
+                    hint: Center(
+                      child: Text(
+                        "-- Seleccionar Distrito --",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 7,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: TextFormField(
+                          controller: correo,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "CORREO",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 5,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: celular,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "CELULAR",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=9?'Son 9 Dígitos':null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: pass1,
+                  obscureText: !_passwordVisible,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    labelStyle: TextStyle(color: kPrimaryColor),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryColor),
+                    ),
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: kPrimaryColor,
+                    ),
+                    // Here is key idea
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: kPrimaryColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: pass2,
+                  obscureText: !_passwordVisible2,
+                  decoration: InputDecoration(
+                    labelText: 'Confirmar contraseña',
+                    labelStyle: TextStyle(color: kPrimaryColor),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryColor),
+                    ),
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: kPrimaryColor,
+                    ),
+                    // Here is key idea
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisible2
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: kPrimaryColor,
+                      ),
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          _passwordVisible2 = !_passwordVisible2;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: CheckboxListTile(
+                    title: Text(
+                      "Acepto los Términos y Condiciones de Delaer para el tratamiento de mis datos.",
+                    ),
+                    secondary: Icon(
+                      Icons.beach_access,
+                      color: _checked ? kPrimaryColor : Colors.grey,
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: _checked,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _checked = value;
+                      });
+                    },
+                    activeColor: kPrimaryColor,
+                    checkColor: Colors.white,
+                    dense: true,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(kPrimaryColor),
+                  ),
+                  onPressed: () {
+                    if (_formRegistroEmpresa.currentState.validate()) {
+                      if (pass1.text != pass2.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Las contraseñas no coinciden.")));
+                      } else if (_checked) {
+                        registrarEmpresa();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Acepte nuestros términos y condiciones.")));
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text("Complete todos lo Campos Obligatorios.")));
+                    }
+                  },
+                  child: Text('REGISTRAR EMPRESA'),
+                ),
+              ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: nombre_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "NOMBRE COMERCIAL",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese su nombre comercial';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: razon_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "RAZÓN SOCIAL",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Ingrese su razon social';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: ruc_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "RUC",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese ruc';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: correo_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "CORREO",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese un correo de contacto';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: direccion_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "DIRECCIÓN",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese dirección';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: interior_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "INTERIOR",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Ingrese # si la empresa ocupa todo el terreno';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: celular_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "CELULAR",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese un número de contacto';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: pass1_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "CONTRASEÑA",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor ingrese una contraseña';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: kPrimaryColor))
-            ),
-            child: TextFormField(
-              controller: pass2_empresa,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "CONFIRMAR CONTRASEÑA",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Las contraseñas no coinciden o esta vacío';
-                }
-              },
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(20.0),
-            child: CheckboxListTile(
-              title: Text(
-                "Acepto los Términos y Condiciones de Delaer para el tratamiento de mis datos.",
-              ),
-              secondary: Icon(Icons.beach_access,color: _checked?kPrimaryColor:Colors.grey,),
-              controlAffinity: ListTileControlAffinity.leading,
-              value: _checked,
-              onChanged: (bool value){
-                setState(() {
-                  _checked = value;
-                });
-              },
-              activeColor: kPrimaryColor,
-              checkColor: Colors.white,
-              dense: true,
-
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
-              ),
-              onPressed: () {
-                // devolverá true si el formulario es válido, o falso si
-                // el formulario no es válido.
-                if (_formKey.currentState.validate()) {
-                  // Si el formulario es válido, queremos mostrar un Snackbar
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Processing Data'),
-                  ));
-                  RegistrarEmpresa(nombre_empresa,razon_empresa,correo_empresa,ruc_empresa,direccion_empresa,interior_empresa,celular_empresa,pass1_empresa,pass2_empresa);
-                  Timer(Duration(seconds: 1),()=>Navigator.of(context).pushReplacementNamed('/login'));
-
-                }else{
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Revise los datos ingresados!'),
-                  ));                }
-              },
-              child: Text('REGISTRAR EMPRESA'),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Future RegistrarEmpresa(TextEditingController nombre_empresa, TextEditingController razon_empresa, TextEditingController correo_empresa, TextEditingController ruc_empresa, TextEditingController direccion_empresa, TextEditingController interior_empresa, TextEditingController celular_empresa, TextEditingController pass1_empresa, TextEditingController pass2_empresa) async {
-
+  Future registrarEmpresa() async {
     var url = Uri.parse(
-        'https://dealertesting.000webhostapp.com/registrar_empresa.php');
-    var response = await http.post(url, body: {'nombre': nombre_empresa.text, 'razon': razon_empresa.text, 'correo': correo_empresa.text, 'ruc': ruc_empresa.text, 'direccion': direccion_empresa.text, 'interior': interior_empresa.text, 'celular': celular_empresa.text, 'pass1': pass1_empresa.text});
-    print(response.body);
-  }
+        'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_registrar_empresa.php');
+    var response = await http.post(url, body: {
+      'comercial': nombre.text,
+      'ruc': ruc.text,
+      'razon': razon.text,
+      'direccion': direccion.text,
+      'interior': interior.text==""?"0":interior.text,
+      'distrito': "${_distritos.indexOf(_distrito) + 1}",
+      'correo': correo.text,
+      'celular': celular.text,
+      'passw': pass1.text,
+      'tipo': '1',
+      'status': '0'
+    });
 
+    print(response.body=='false'?'null':'tiene contenido');
+    print(response.body);
+
+    var data = response.body!='false'?json.decode(response.body):{'0' : "-1"};
+    switch ("${data['0']}") {
+      case "0":
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "No se pudo registrar \nMotivo: El correo ya ha sido registrado"),
+          ),
+        );
+        break;
+      case "1":
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "Registro exitoso!.\nSe enviará un correo en los próximos minutos."),
+          ),
+        );
+        Timer(Duration(seconds: 1),
+            () => Navigator.of(context).pushReplacementNamed('/login'));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 10),
+            content:
+                Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
+          ),
+        );
+        break;
+    }
+
+
+  }
 }

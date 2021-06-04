@@ -74,7 +74,7 @@ class _PrincipalConductorState extends State<PrincipalConductor> {
               "assets/icons/icon_close.png",
             ),
             onPressed: () {
-              ClearPreferences();
+              clearPreferences();
               Navigator.of(context).pushNamed('/login');
             },
           )
@@ -182,7 +182,7 @@ class _PrincipalConductorState extends State<PrincipalConductor> {
     );
   }
 
-  Future<void> ClearPreferences() async {
+  Future<void> clearPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
   }

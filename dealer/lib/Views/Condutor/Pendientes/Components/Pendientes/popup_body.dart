@@ -18,7 +18,7 @@ class _PopUpBodyState extends State<PopUpBody> {
       color: Colors.white,
       child: ListView(
         children: [
-          InteractiveViewer(child: Image.asset("assets/images/mapa_default.png",)),
+          InteractiveViewer(child: Image.asset("assets/images/mapa_default.png",),),
           Container(
             margin: EdgeInsets.all(30.0),
             child: Column(
@@ -118,7 +118,7 @@ class _DetalleState extends State<Detalle> {
   Widget build(BuildContext context) {
     return Row(children: [
       Container(
-        child: Text(widget.texto),
+        child: Text("${widget.texto}"),
         padding: EdgeInsets.all(5.0),
         width: MediaQuery.of(context).size.width - 60,
         decoration: BoxDecoration(

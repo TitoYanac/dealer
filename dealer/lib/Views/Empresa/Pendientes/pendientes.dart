@@ -1,6 +1,10 @@
-import 'package:dealer/Views/Condutor/Pendientes/Components/tablaPendientes.dart';
-import 'package:dealer/Views/Condutor/Pendientes/Components/tablaRealizados.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/tablaPendientes.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/tablaRealizados.dart';
+import 'package:dealer/Views/Empresa/Pendientes/testing.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Pendientes extends StatefulWidget {
   @override
@@ -67,10 +71,20 @@ class _PendientesState extends State<Pendientes> {
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(15.0),
-          child: DataTablePendientes(filas: pendientes),
-        ),
+        FutureBuilder(
+            future:   ConseguirDatos(),
+            builder: (context,snapshot){
+              if(snapshot.connectionState == ConnectionState.done){
+                return Container(
+                  margin: EdgeInsets.all(15.0),
+                  child: DataTablePendientes(filas: pendientes),
+                );
+              }else{
+                return CircularProgressIndicator();
+              }
+            })
+        ,
+
         Container(
           margin: EdgeInsets.only(
             top: 25,
@@ -94,4 +108,42 @@ class _PendientesState extends State<Pendientes> {
       ],
     );
   }
+
+  Future ConseguirDatos() async {
+    var url = Uri.parse('https://dealertesting.000webhostapp.com/empresa/Mostrar_EnviosPendientes.php');
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String> Empresa = preferences.getStringList('miUsuario');
+    var response = await http.post(url, body: { 'idEmpresa': Empresa[0] });
+    List<dynamic> milista = json.decode(response.body);
+
+
+      pendientes = [];
+
+    for(var item in milista){
+      Map<String,String> aux = new Map<String,String>();
+      aux['ID_FICHA']=item['ID_FICHA'].toString();
+      aux['ID_Empresa']=item['ID_Empresa'];
+      aux['ORIGEN']=item['ORIGEN'];
+      aux['DESTINO']=item['DESTINO'];
+      aux['TIPO']=item['TIPO'];
+      aux['FECHA_CREACION']=item['FECHA_CREACION'];
+      aux['ESTADO']=item['ESTADO'];
+      aux['CLIENTE_NOMBRE']=item['CLIENTE_NOMBRE'];
+      aux['CLIENTE_APELLIDO']=item['CLIENTE_APELLIDO'];
+      pendientes.add(aux);
+    }
+
+
+    return json.decode(response.body);
+  }
+
+
+
+
+
 }
+
+
+/*
+*
+* */

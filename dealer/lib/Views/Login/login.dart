@@ -21,11 +21,13 @@ class _LoginState extends State<Login> {
 
   Color _colorLogin = kPrimaryColor;
   Color _colorRegistro = Colors.white;
-  String Tipo;
+  String tipo;
   List<String> miUsuario;
   bool _passwordVisible;
+
   @override
   void initState() {
+    super.initState();
     _passwordVisible = false;
     correo = new TextEditingController();
     pass = new TextEditingController();
@@ -33,24 +35,33 @@ class _LoginState extends State<Login> {
   }
 
   void userSignIn() async {
-    var url =
-        Uri.parse('https://dealertesting.000webhostapp.com/logear_usuario.php');
+    var url = Uri.parse('https://dealertesting.000webhostapp.com/login.php');
     var response =
         await http.post(url, body: {'correo': correo.text, 'pass': pass.text});
-    if(response.body!=""){
-      var data = json.decode(response.body);
+
+    var data = json.decode(response.body);
+    print(data);
+    if (data['FALSE'] != '0') {
+      print("entro if");
       miUsuario = [];
-      print(data['TIPO']);
-        for (int i = 0;i <= 6;i++) {
-          miUsuario.add("${data['$i']}");
-        }
-      Tipo = data['TIPO'];
-      guardarPreferencias();
+      int size = data.length;
+      for (int i = 0; i < size/2; i++) {
+        miUsuario.add("${data['$i']}");
 
-    }else{
-      Tipo = '-1';
+      }
+      if(data['STATUS']=='1'){
+        setState(() {
+          tipo = data['TIPO'];
+        });
+        guardarPreferencias();
+      }else{
+        setState(() {
+          tipo = "-2";
+        });
+      }
+    } else {
+      tipo = "-1";
     }
-
     redireccionar();
   }
 
@@ -123,7 +134,7 @@ class _LoginState extends State<Login> {
                             border: InputBorder.none,
                             fillColor: Colors.white,
                             prefixIcon: Icon(
-                              Icons.email,
+                              Icons.lock,
                               color: Colors.white,
                             ),
                             // Here is key idea
@@ -359,16 +370,28 @@ class _LoginState extends State<Login> {
   }
 
   void redireccionar() {
-    switch (Tipo) {
+    switch (tipo) {
       case '0':
         Navigator.of(context).pushNamed('/principal_conductor', arguments: '0');
         break;
       case '1':
         Navigator.of(context).pushNamed('/principal_empresa', arguments: '0');
         break;
+      case '-2':
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("La cuenta todavía no ha sido habilitada!"),
+            duration: Duration(seconds: 10),
+          ),
+        );
+        break;
       default:
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Usuario Incorrecto!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Usuario Incorrecto!"),
+            duration: Duration(seconds: 10),
+          ),
+        );
         break;
     }
   }
@@ -377,13 +400,13 @@ class _LoginState extends State<Login> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print(
         "LOGIN shared preferences miUsuario : ${preferences.getStringList('miUsuario')}");
-    print("LOGIN shared preferences Tipo : ${preferences.getString('Tipo')}");
+    print("LOGIN shared preferences tipo : ${preferences.getString('tipo')}");
   }
 
   guardarPreferencias() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setStringList("miUsuario", miUsuario);
-    preferences.setString("Tipo", Tipo);
+    preferences.setString("tipo", tipo);
     imprimirPreferencias();
   }
 }

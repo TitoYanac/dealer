@@ -5,8 +5,6 @@ import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 
 class EnviosEmpresa extends StatefulWidget {
-  final String tipo;
-  const EnviosEmpresa({Key key, this.tipo}) : super(key: key);
   @override
   _EnviosEmpresaState createState() => _EnviosEmpresaState();
 }
@@ -77,7 +75,7 @@ class _EnviosEmpresaState extends State<EnviosEmpresa> {
           ),
           child: ListTile(
             leading: Image.asset("assets/icons/icon_tipo2.png", width: 60.0,),
-            title: Text("Flexible",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+            title: Text("SAME DAY",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
             subtitle: Column(
               children: [
                 Text("Recogemos tus paquetes y los enviamos a todo Lima y Provincias."),
@@ -86,7 +84,7 @@ class _EnviosEmpresaState extends State<EnviosEmpresa> {
             ),
             dense: true,
             onTap: (){
-              showPopup(context, PopUpBody(tipo:"Flexible"),"CREA UN ENVIO FLEXIBLE");
+              showPopup(context, PopUpBody(tipo:"SAME DAY"),"CREA UN ENVIO SAME DAY");
             },
           ),
         ),
@@ -139,10 +137,10 @@ class _EnviosEmpresaState extends State<EnviosEmpresa> {
           content: Scaffold(
             appBar: AppBar(
               backgroundColor: kPrimaryColor,
-              title: Text(tipo,textAlign: TextAlign.end,),
+              title: Text(tipo,textAlign: TextAlign.end,style: TextStyle(color: Colors.white),),
               leading: new Builder(builder: (context) {
                 return IconButton(
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.close,color: Colors.white,),
                   onPressed: () {
                     try {
                       Navigator.pop(context); //close the popup

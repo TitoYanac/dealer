@@ -2,92 +2,103 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:dealer/Bean/Bean_ficha.dart';
 import 'package:http/http.dart' as http;
-import 'package:dealer/Views/Empresa/Mapa/mapa.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdownfield/dropdownfield.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopUpBody extends StatefulWidget {
   final String tipo;
+
   const PopUpBody({Key key, this.tipo}) : super(key: key);
   @override
   _PopUpBodyState createState() => _PopUpBodyState();
 }
 
+class Animal {
+  final int id;
+  final String name;
+
+  Animal({
+    this.id,
+    this.name,
+  });
+}
+
 class _PopUpBodyState extends State<PopUpBody> {
-  String idtipoenvio = "1";
-  String idempresa = "2";
+
+  List distritos = [
+    "Ancón",
+    "Ate Vitarte",
+    "Barranco",
+    "Breña",
+    "Carabayllo",
+    "Chaclacayo",
+    "Chorrillos",
+    "Cieneguilla",
+    "Comas",
+    "El Agustino",
+    "Independencia",
+    "Jesús María",
+    "La Molina",
+    "La Victoria",
+    "Cercado de Lima",
+    "Lince",
+    "Los Olivos",
+    "Lurigancho",
+    "Lurín",
+    "Magdalena del Mar",
+    "Miraflores",
+    "Pachacamac",
+    "Pucusana",
+    "Pueblo Libre",
+    "Puente Piedra",
+    "Punta Hermosa",
+    "Punta Negra",
+    "Rímac",
+    "San Bartolo",
+    "San Borja",
+    "San Isidro",
+    "San Juan de Lurigancho",
+    "San Juan de Miraflores",
+    "San Luis",
+    "San Martín de Porres",
+    "San Miguel",
+    "Santa Anita",
+    "Santa María del Mar",
+    "Santa Rosa",
+    "Santiago de Surco",
+    "Surquillo",
+    "Villa El Salvador",
+    "Villa María del Triunfo",
+  ];
+
+  List<String> miUsuario;
+  String tipoenvio = "";
+  String idempresa = "";
   String estado_ficha = "PENDIENTE";
+  String coord_origen = "";
+  String coord_destino = "";
 
-  final _formKey = GlobalKey<FormState>();
-  Map<String, dynamic> formData;
-  List<String> distritos = [
-    'Ancón',
-    'Ate Vitarte',
-    'Barranco',
-    'Breña',
-    'Carabayllo',
-    'Chaclacayo',
-    'Chorrillos',
-    'Cieneguilla',
-    'Comas',
-    'El Agustino',
-    'Independencia',
-    'Jesús María',
-    'La Molina',
-    'La Victoria',
-    'Lima',
-    'Lince',
-    'Los Olivos',
-    'Lurigancho',
-    'Lurín',
-    'Magdalena del Mar',
-    'Miraflores',
-    'Pachacamac',
-    'Pucusana',
-    'Pueblo Libre',
-    'Puente Piedra',
-    'Punta Hermosa',
-    'Punta Negra',
-    'Rímac',
-    'San Bartolo',
-    'San Borja',
-    'San Isidro',
-    'San Juan de Lurigancho',
-    'San Juan de Miraflores',
-    'San Luis',
-    'San Martín de Porres',
-    'San Miguel',
-    'Santa Anita',
-    'Santa María del Mar',
-    'Santa Rosa',
-    'Santiago de Surco',
-    'Surquillo',
-    'Villa El Salvador',
-    'Villa María del Triunfo',
-  ];
-  List<String> countries = [
-    'Peru',
-    'Ecuador',
-    'Venezuela',
-  ];
+  String miDistrito = "";
 
-  _PopUpBodyState() {
-    formData = {
-      'Distrito': 'Lima',
-      'Pais': 'Peru',
-    };
-  }
+  bool checkSize0 = false;
+  bool checkSize1 = false;
+  bool checkSize2 = false;
+  bool checkSize4 = false;
+  bool checkSize5 = false;
 
-  final _key_AceptarEnvio = GlobalKey<FormState>();
+  String SizeProduct = "";
+  String delicado = "";
+  final _key_CrearEnvio = GlobalKey<FormState>();
 
   final TextEditingController nombre_cliente = new TextEditingController();
   final TextEditingController apellido_cliente = new TextEditingController();
   final TextEditingController dni_cliente = new TextEditingController();
   final TextEditingController celular_cliente = new TextEditingController();
   final TextEditingController direccion_cliente = new TextEditingController();
-  final TextEditingController distrito_cliente = new TextEditingController();
+  final TextEditingController dist_cliente = new TextEditingController();
+  String distrito_cliente;
   final TextEditingController producto_cliente = new TextEditingController();
   final TextEditingController producto_size = new TextEditingController();
   final TextEditingController Estado_producto = new TextEditingController();
@@ -97,8 +108,9 @@ class _PopUpBodyState extends State<PopUpBody> {
   @override
   Widget build(BuildContext context) {
     // Crea un widget Form usando el _key_AceptarEnvio que creamos anteriormente
+
     return Form(
-      key: _key_AceptarEnvio,
+      key: _key_CrearEnvio,
       child: ListView(
         children: <Widget>[
           Padding(
@@ -107,7 +119,7 @@ class _PopUpBodyState extends State<PopUpBody> {
               "Datos del Cliente:",
               style: TextStyle(
                 fontSize: 24,
-                color: Colors.black54,
+                color: kPrimaryColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -118,42 +130,29 @@ class _PopUpBodyState extends State<PopUpBody> {
                 child: Container(
                   child: TextFormField(
                     controller: nombre_cliente,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
                       hintText: "Nombres",
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty) return 'Ingrese el nombre del cliente';
-                    },
+                    validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
                   ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1, color: kPrimaryColor)),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   margin: EdgeInsets.all(20),
                 ),
               ),
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1, color: kPrimaryColor)),
-                  ),
                   child: TextFormField(
                     controller: apellido_cliente,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
                       hintText: "Apellidos",
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty)
-                        return 'Ingrese su apellido del cliente';
-                    },
+                    validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   margin: EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
@@ -163,89 +162,104 @@ class _PopUpBodyState extends State<PopUpBody> {
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: kPrimaryColor))),
                   child: TextFormField(
                     controller: dni_cliente,
+                    keyboardType: TextInputType.number,
+                    maxLength: 8,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
                       hintText: "DNI",
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Ingrese DNI del cliente';
-                      }
-                    },
+                    validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
                   ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: kPrimaryColor))),
                   child: TextFormField(
                     controller: celular_cliente,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    maxLength: 9,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
                       hintText: "Celular",
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Ingrese numero de contacto del cliente';
-                      }
-                    },
+                    validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
                   ),
                 ),
               ),
             ],
           ),
           Container(
-            margin:
-                EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: kPrimaryColor))),
             child: TextFormField(
               controller: direccion_cliente,
               decoration: InputDecoration(
-                border: InputBorder.none,
                 hintText: "Direccion",
                 hintStyle: TextStyle(color: Colors.grey),
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Ingrese la dirección del cliente';
-                }
-              },
+              validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
             ),
+            margin:
+                EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0, bottom: 20),
           ),
           Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            margin:
+                EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0, bottom: 20),
             decoration: BoxDecoration(
-              border: Border.all(width: 1, color: kPrimaryColor,
-              ),
+              border: Border.all(color: kPrimaryColor, width: 1),
+              borderRadius: BorderRadius.circular(15),
             ),
-            child: DropDownField(
-              value: formData['Distrito'],
-              icon: Icon(Icons.location_city),
-              required: true,
-              hintText: 'Escoge un Distrito',
-              labelText: 'Distrito *',
-              items: distritos,
-              strict: false,
-              setter: (dynamic newValue) {
-                formData['Distrito'] = newValue;
+            child: DropdownButton(
+
+              hint: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  "-- Seleccionar Distrito --",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kPrimaryColor),
+                ),
+              ),
+              dropdownColor: Colors.white,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: kPrimaryColor,
+              ),
+              iconSize: 36,
+              isExpanded: true,
+              underline: SizedBox(),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+              ),
+              value: distrito_cliente,
+              onChanged: (newValue) {
+                setState(() {
+                  distrito_cliente = newValue;
+                });
               },
+              items: [
+                for (int i = 0; i < distritos.length; i++)
+                  DropdownMenuItem(
+                    value: "$i",
+                    child: Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: Text(
+                        "${distritos[i]}",
+                        textAlign: TextAlign.center,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1, color: kPrimaryColor),
+                        ),
+                      ),
+                    ),
+                  )
+              ],
             ),
           ),
           Padding(
@@ -254,100 +268,139 @@ class _PopUpBodyState extends State<PopUpBody> {
               "Datos del Producto:",
               style: TextStyle(
                 fontSize: 24,
-                color: Colors.black54,
+                color: kPrimaryColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ),
           Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: kPrimaryColor))),
             child: TextFormField(
               controller: producto_cliente,
               decoration: InputDecoration(
-                border: InputBorder.none,
                 hintText: "Producto que se envia",
                 hintStyle: TextStyle(color: Colors.grey),
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Ingrese Item del envio';
-                }
-              },
+              validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
+            ),
+            margin: EdgeInsets.all(20.0),
+          ),
+          Container(
+            margin: EdgeInsets.all(20.0),
+            child: TextFormField(
+              controller: descripcion_producto,
+              decoration: InputDecoration(
+                hintText: "Descripcion del producto",
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
+              validator: (value) { return value.isEmpty?'Campo obligatorio':null; },
             ),
           ),
           Row(
             children: [
               Expanded(
+                flex: 7,
                 child: Container(
                   margin: EdgeInsets.all(20.0),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: kPrimaryColor))),
-                  child: TextFormField(
-                    controller: producto_size,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Tamaño",
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
+                  child: Column(
+                    children: [
+                      Text(
+                        "Tamaño:",
+                        style: TextStyle(color: Colors.grey),
                       ),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'grande | mediano | pequeño';
-                      }
-                    },
+                      CheckboxListTile(
+                          value: checkSize0,
+                          checkColor: Colors.white,
+                          activeColor: kPrimaryColor,
+                          title: Text(
+                            "Grande",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          onChanged: (bool value) {
+                            setState(() {
+                              checkSize0 = true;
+                              checkSize1 = false;
+                              checkSize2 = false;
+                              SizeProduct = "grande";
+                            });
+                          }),
+                      CheckboxListTile(
+                          value: checkSize1,
+                          checkColor: Colors.white,
+                          activeColor: kPrimaryColor,
+                          title: Text(
+                            "Mediano",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          onChanged: (bool value) {
+                            setState(() {
+                              checkSize0 = false;
+                              checkSize1 = true;
+                              checkSize2 = false;
+                              SizeProduct = "mediano";
+                            });
+                          }),
+                      CheckboxListTile(
+                          value: checkSize2,
+                          checkColor: Colors.white,
+                          activeColor: kPrimaryColor,
+                          title: Text(
+                            "Pequeño",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          onChanged: (bool value) {
+                            setState(() {
+                              checkSize0 = false;
+                              checkSize1 = false;
+                              checkSize2 = true;
+                              SizeProduct = "pequeño";
+                            });
+                          }),
+                    ],
                   ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  margin: EdgeInsets.all(20.0),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: kPrimaryColor))),
-                  child: TextFormField(
-                    controller: Estado_producto,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Delicado",
-                      hintStyle: TextStyle(color: Colors.grey),
+                flex: 5,
+                child: Column(
+                  children: [
+                    Text(
+                      "Delicado:",
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'SI | NO';
-                      }
-                    },
-                  ),
+                    CheckboxListTile(
+                        value: checkSize4,
+                        checkColor: Colors.white,
+                        activeColor: kPrimaryColor,
+                        title: Text(
+                          "SI",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        onChanged: (bool value) {
+                          setState(() {
+                            checkSize4 = true;
+                            checkSize5 = false;
+                            delicado = "si";
+                          });
+                        }),
+                    CheckboxListTile(
+                        value: checkSize5,
+                        checkColor: Colors.white,
+                        activeColor: kPrimaryColor,
+                        title: Text(
+                          "NO",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        onChanged: (bool value) {
+                          setState(() {
+                            checkSize4 = false;
+                            checkSize5 = true;
+                            delicado = "no";
+                          });
+                        }),
+                  ],
                 ),
               ),
             ],
-          ),
-          Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: kPrimaryColor))),
-            child: TextFormField(
-              controller: descripcion_producto,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Descripcion del producto",
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Ingrese una breve descripcion';
-                }
-              },
-            ),
           ),
           Container(
             margin: const EdgeInsets.all(20.0),
@@ -357,32 +410,12 @@ class _PopUpBodyState extends State<PopUpBody> {
                     MaterialStateProperty.all<Color>(kPrimaryColor),
               ),
               onPressed: () {
-                // devolverá true si el formulario es válido, o falso si
-                // el formulario no es válido.
-                if (_key_AceptarEnvio.currentState.validate()) {
+                if (_key_CrearEnvio.currentState.validate()) {
                   // Si el formulario es válido, queremos mostrar un Snackbar
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Processing Data'),
-                  ));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text("Creando Envío!")));
 
-                  ficha objeto = new ficha(
-                      nombre_cliente.text,
-                      apellido_cliente.text,
-                      dni_cliente.text,
-                      celular_cliente.text,
-                      direccion_cliente.text,
-                      distrito_cliente.text,
-                      producto_cliente.text,
-                      Estado_producto.text,
-                      descripcion_producto.text,
-                      idtipoenvio,
-                      idempresa,
-                      estado_ficha);
-
-                  Timer(
-                      Duration(seconds: 2),
-                      () => Navigator.of(context)
-                          .pushReplacementNamed('/mapa', arguments: objeto));
+                  CrearFicha();
                 }
               },
               child: Text('INGRESAR ORIGEN Y DESTINO'),
@@ -392,34 +425,46 @@ class _PopUpBodyState extends State<PopUpBody> {
       ),
     );
   }
-/*
-  Future RegistrarFicha(
-      TextEditingController nombre_cliente,
-      TextEditingController apellido_cliente,
-      TextEditingController dni_cliente,
-      TextEditingController celular_cliente,
-      TextEditingController direccion_cliente,
-      TextEditingController distrito_cliente,
-      TextEditingController producto_cliente,
-      TextEditingController estado_producto,
-      TextEditingController descripcion_producto) async {
-    var url = Uri.parse(
-        'https://dealertesting.000webhostapp.com/registrar_ficha.php');
-    var response = await http.post(url, body: {
-      'nombre': nombre_cliente.text,
-      'apellido': apellido_cliente.text,
-      'dni': dni_cliente.text,
-      'celular': celular_cliente.text,
-      'direccion': direccion_cliente.text,
-      'distrito': distrito_cliente.text,
-      'producto': producto_cliente.text,
-      'Estado': Estado_producto.text,
-      'descripcion': descripcion_producto.text,
-    });
-    print(response.body);
-  }*/
 
   Future<bool> buildFutures() async {
     return true;
+  }
+
+  CrearFicha() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    miUsuario = preferences.getStringList('miUsuario');
+    idempresa = miUsuario[0];
+
+    tipoenvio = widget.tipo == "EXPRESS"
+        ? "1"
+        : widget.tipo == "SAME DAY"
+            ? "2"
+            : "3";
+
+    ficha objeto = new ficha(
+      nombre_cliente.text,
+      apellido_cliente.text,
+      dni_cliente.text,
+      celular_cliente.text,
+      direccion_cliente.text,
+      distrito_cliente,
+      producto_cliente.text,
+      descripcion_producto.text,
+      SizeProduct,
+      delicado,
+      tipoenvio,
+      idempresa,
+      estado_ficha,
+      coord_origen,
+      coord_destino,
+      '',
+      '',
+    );
+
+    Timer(
+        Duration(seconds: 1),
+            () => Navigator.of(context)
+            .pushReplacementNamed('/mapa', arguments: objeto));
+
   }
 }

@@ -4,26 +4,36 @@ class ficha {
   String documento;
   String celular;
   String direccion;
-  String id_distrito;
+  String distrito;
   String producto;
-  String delicado;
   String descripcion;
-  String idtipoenvio;
+  String SizeProduct;
+  String delicado;
+  String tipoenvio;
   String idempresa;
   String estado;
+  String coord_origen;
+  String coord_destino;
+  String totalDistance;
+  String totalDuration;
   ficha(
     this.nombre,
     this.apellido,
     this.documento,
     this.celular,
     this.direccion,
-    this.id_distrito,
+    this.distrito,
     this.producto,
-    this.delicado,
     this.descripcion,
-    this.idtipoenvio,
+    this.SizeProduct,
+    this.delicado,
+    this.tipoenvio,
     this.idempresa,
     this.estado,
+    this.coord_origen,
+    this.coord_destino,
+    this.totalDistance,
+    this.totalDuration,
   );
   ficha.fromJson(Map<String, dynamic> json) {
     nombre = json['nombre'];
@@ -31,12 +41,17 @@ class ficha {
     documento = json['documento'];
     celular = json['celular'];
     direccion = json['direccion'];
-    id_distrito = json['id_distrito'];
+    distrito = json['distrito'];
     producto = json['producto'];
     delicado = json['delicado'];
+    delicado = json['size'];
     descripcion = json['descripcion'];
-    idtipoenvio = json['idtipoenvio'];
+    tipoenvio = json['tipoenvio'];
     idempresa = json['idempresa'];
     estado = json['estado'];
+    coord_origen = json['coord_origen'];
+    coord_destino = json['coord_destino'];
+    coord_origen = json['totalDistance'];
+    coord_destino = json['totalDuration'];
   }
 }

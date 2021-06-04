@@ -13,7 +13,13 @@ class DataTablePendientes extends StatefulWidget {
 }
 
 class _DataTablePendientesState extends State<DataTablePendientes> {
-  Widget renderPendientes() {
+
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.filas);
+    //return Container();
+
     return Column(
       children: widget.filas
           .map(
@@ -36,9 +42,9 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
             ],
           ),
           child: ListTile(
-            leading: Image.asset("assets/images/monitor.png"),
-            title: Text("Nombre del cliente"),
-            subtitle: Text("Origen → Destino"),
+            leading: item['TIPO']=="EXPRESS"?Image.asset("assets/icons/icon_moto.png"):item['TIPO']=="SAME DAY"?Image.asset("assets/icons/icon_tipo2.png"):Image.asset("assets/icons/icon_tipo3.png"),
+            title: Text("${item['CLIENTE_NOMBRE']} ${item['CLIENTE_APELLIDO']}"),
+            subtitle: Text("${item['ORIGEN']} → ${item['DESTINO']}"),
             trailing: Text("1h 6m"),
             dense: true,
             onTap: (){
@@ -49,11 +55,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
       )
           .toList(),
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return renderPendientes();
   }
   showPopup(BuildContext context, Widget widget, Map<String, String> fila,
       {BuildContext popupContext}) {
@@ -70,7 +72,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
               backgroundColor: kPrimaryColor,
               title: Row(
                 children: [
-                  Text(fila["origen"]),
+                  Text(fila["ORIGEN"]),
                   Expanded(
                       child: Center(
                           child: Icon(
@@ -80,7 +82,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
                   Container(
                       padding: EdgeInsets.only(right: 20),
                       child: Text(
-                        fila["destino"],
+                        fila["DESTINO"],
                         textAlign: TextAlign.right,
                       )),
                 ],

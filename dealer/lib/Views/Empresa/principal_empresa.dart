@@ -59,6 +59,7 @@ class _PrincipalEmpresaState extends State<PrincipalEmpresa> {
               "assets/icons/icon_close.png",
             ),
             onPressed: () {
+              clearPreferences();
               Navigator.of(context).pushNamed('/login');
             },
           )
@@ -162,5 +163,8 @@ class _PrincipalEmpresaState extends State<PrincipalEmpresa> {
     print("ENVIOS shared preferences Tipo : ${preferences.getString('Tipo')}");
 
   }
-
+  Future<void> clearPreferences() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
+  }
 }

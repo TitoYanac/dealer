@@ -1,17 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6f54c5b2-3c7f-4bb0-ab8c-46855da26b05" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/dealer/assets/icons/carr_flash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dealer/assets/icons/market_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/testing.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dealer/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dealer/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Bean/Bean_ficha.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Bean/Bean_ficha.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/Components/Pendientes/popup_body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/Components/Pendientes/popup_body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/Components/tablaPendientes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/Components/tablaPendientes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/pendientes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Condutor/Pendientes/pendientes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Condutor/RegistroConductor/registro_conductor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Condutor/RegistroConductor/registro_conductor.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Envios/Components/popup_body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Envios/Components/popup_body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Envios/Components/tablaEnvios.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Envios/Components/tablaEnvios.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Mapa/mapa.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Mapa/mapa.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/Components/Pendientes/popup_body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/Components/Pendientes/popup_body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/Components/tablaPendientes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/Components/tablaPendientes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/pendientes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/Pendientes/pendientes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/RegistroEmpresa/registro_empresa.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/RegistroEmpresa/registro_empresa.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Empresa/principal_empresa.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Empresa/principal_empresa.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/Views/Login/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/Views/Login/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dealer/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/dealer/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_XL_API_30]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -34,7 +73,7 @@
     <property name="android.sdk.path" value="$PROJECT_DIR$/../../../../../sdk/Android" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../flutter-googlemaps-routes-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/dealer/assets/icons" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -42,19 +81,19 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\assets\icons" />
+      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\map" />
+      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Empresa\Envios" />
+      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Empresa" />
+      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\assets\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\assets\images" />
       <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib" />
       <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Empresa" />
       <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Condutor\Pendientes\Components" />
       <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Condutor\Pendientes\Components\Pendientes" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\map" />
-      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Empresa\Envios" />
-      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\lib\Views\Empresa" />
-      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\assets\icons" />
-      <recent name="C:\Users\TITO\AndroidStudioProjects\Flutter_Projects\Dealer\dealer\assets\images" />
     </key>
   </component>
   <component name="RunManager">
@@ -81,6 +120,18 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="981" y="194" key="#Inspections" timestamp="1621807410334">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -90,41 +141,41 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="828" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1616358068997" />
-    <state x="1053" y="100" width="774" height="840" key="AVDManager" timestamp="1622155146711">
+    <state x="1053" y="100" width="774" height="840" key="AVDManager" timestamp="1622393886538">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1053" y="100" width="774" height="840" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1622155146711" />
+    <state x="1053" y="100" width="774" height="840" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1622393886538" />
     <state x="1201" y="275" key="FileChooserDialogImpl" timestamp="1621998982554">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1201" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1621998982554" />
-    <state width="470" height="274" key="GridCell.Tab.0.bottom" timestamp="1622247139131">
+    <state width="1025" height="274" key="GridCell.Tab.0.bottom" timestamp="1622756431341">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="470" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1622247139131" />
-    <state width="470" height="274" key="GridCell.Tab.0.center" timestamp="1622247139131">
+    <state width="1025" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1622756431341" />
+    <state width="1025" height="274" key="GridCell.Tab.0.center" timestamp="1622756431341">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="470" height="274" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1622247139131" />
-    <state width="470" height="274" key="GridCell.Tab.0.left" timestamp="1622247139131">
+    <state width="1025" height="274" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1622756431341" />
+    <state width="1025" height="274" key="GridCell.Tab.0.left" timestamp="1622756431341">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="470" height="274" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1622247139131" />
-    <state width="470" height="274" key="GridCell.Tab.0.right" timestamp="1622247139131">
+    <state width="1025" height="274" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1622756431341" />
+    <state width="1025" height="274" key="GridCell.Tab.0.right" timestamp="1622756431341">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="470" height="274" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1622247139131" />
-    <state x="820" y="174" key="SettingsEditor" timestamp="1618585098630">
+    <state width="1025" height="274" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1622756431341" />
+    <state x="820" y="174" key="SettingsEditor" timestamp="1622393345000">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="820" y="174" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1618585098630" />
+    <state x="820" y="174" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1622393345000" />
     <state x="1045" y="243" key="run.anything.popup" timestamp="1621708202440">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1045" y="243" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621708202440" />
-    <state x="1037" y="229" width="672" height="678" key="search.everywhere.popup" timestamp="1621779194728">
+    <state x="1037" y="229" width="672" height="678" key="search.everywhere.popup" timestamp="1622580519591">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1037" y="229" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621779194728" />
+    <state x="1037" y="229" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1622580519591" />
   </component>
 </project>

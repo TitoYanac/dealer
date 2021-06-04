@@ -23,7 +23,7 @@ class _PopUpBodyState extends State<PopUpBody> {
             width: double.infinity,
             height: 200.0,
             child: Center(
-              child: Image.asset("assets/images/mapa_default.png"),
+              child: widget.element['ESTADO']=="ASIGNADO"?Image.asset("assets/images/mapa_default.png"):Text("-- Aun no se ha tomado el envio --"),
             ),
             decoration: BoxDecoration(
               color: Colors.white,

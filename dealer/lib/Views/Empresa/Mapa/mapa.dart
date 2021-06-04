@@ -5,6 +5,8 @@ import 'directions_model.dart';
 import 'directions_repository.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:http/http.dart' as http;
+
 class MapScreen extends StatefulWidget {
   final ficha data;
   const MapScreen({Key key, this.data}) : super(key: key);
@@ -23,7 +25,12 @@ class _MapScreenState extends State<MapScreen> {
   Marker _origin;
   Marker _destination;
   Directions _info;
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("antes de setear ubicacion: ${widget.data}");
+  }
   @override
   void dispose() {
     _googleMapController.dispose();
@@ -95,7 +102,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
           if (_origin != null && _destination != null)
             TextButton(
-              onPressed: () => {},
+              onPressed: () => guardarFicha(),
               style: TextButton.styleFrom(
                 primary: Colors.red,
                 textStyle: const TextStyle(fontWeight: FontWeight.w800),
@@ -217,5 +224,43 @@ class _MapScreenState extends State<MapScreen> {
           .getDirections(origin: _origin.position, destination: pos);
       setState(() => _info = directions);
     }
+  }
+
+  guardarFicha() async{
+      widget.data.coord_origen = "${_origin.position.latitude} , ${_origin.position.longitude}";
+      widget.data.coord_destino= "${_destination.position.latitude} , ${_destination.position.longitude}";
+
+
+      var url =
+      Uri.parse('https://dealertesting.000webhostapp.com/empresa/Crear_Envio.php');
+      var response =
+      await http.post(url, body: {
+        'nombre' : widget.data.nombre,
+        'apellido' : widget.data.apellido,
+        'documento' : widget.data.documento,
+        'celular' : widget.data.celular,
+        'direccion' : widget.data.direccion,
+        'distrito' : widget.data.distrito,
+        'producto' : widget.data.producto,
+        'descripcion' : widget.data.descripcion,
+        'SizeProduct' : widget.data.SizeProduct,
+        'delicado' : widget.data.delicado,
+        'tipoenvio' : widget.data.tipoenvio,
+        'idempresa' : widget.data.idempresa,
+        'estado' : widget.data.estado,
+        'coord_origen' : widget.data.coord_origen,
+        'coord_destino' : widget.data.coord_destino,
+        'totalDistance':_info.totalDistance ,
+      'totalDuration': _info.totalDuration,
+      });
+
+      if(response.body!="false"){
+        print(response.body);
+        Navigator.of(context).pushNamed('/principal_empresa', arguments: '1');
+      }else{
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("No se pudo crear el envio")));
+      }
+
   }
 }

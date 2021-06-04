@@ -1,3 +1,4 @@
+import 'package:dealer/constats.dart';
 import 'package:dealer/route_generator.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class app extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Dealer",
       theme: ThemeData(
+        primaryColor: kPrimaryColor,
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
