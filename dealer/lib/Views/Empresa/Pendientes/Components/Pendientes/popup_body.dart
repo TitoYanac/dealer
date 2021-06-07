@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,13 @@ class PopUpBody extends StatefulWidget {
 
 class _PopUpBodyState extends State<PopUpBody> {
   @override
+  void initState() {
+
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    Widget _popupBody = Container(
+    return Container(
       color: Colors.white,
       child: ListView(
         children: [
@@ -55,80 +59,44 @@ class _PopUpBodyState extends State<PopUpBody> {
                   texto: "Tienda: ",
                 ),
                 SizedBox(height: 5),
-                Detalle(texto: "SODIMAC S.A."),
+                Detalle(texto: "${widget.element['EMPRESA']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección de la Tienda: "),
                 SizedBox(height: 5),
                 Detalle(
                     texto:
-                        "Jiron Cajamarquilla con, San Juan de Lurigancho 15427"),
+                    "${widget.element['DIR_ORIGEN']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Cliente: "),
                 SizedBox(height: 5),
-                Detalle(texto: "Tito Jesús Yánac Saldaña"),
+                Detalle(texto: "${widget.element['CLIENTE_NOMBRE']} ${widget.element['CLIENTE_APELLIDO']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección del Cliente: "),
                 SizedBox(height: 5),
-                Detalle(texto: "av.malecón checa N°621"),
+                Detalle(texto: "${widget.element['DIR_DESTINO']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Telefono de contacto del cliente: "),
                 SizedBox(height: 15),
-                Detalle(texto: "970576076"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "N° Boleta / Factura: "),
-                SizedBox(height: 15),
-                Detalle(texto: "0041604166-64"),
+                Detalle(texto: "${widget.element['CLIENTE_CELULAR']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Items del Envio: "),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 1"),
+                Detalle(texto: "${widget.element['PRODUCTO']}"),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 2"),
+                Etiqueta(texto: "Distancia del viaje: "),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 3"),
+                Detalle(texto: "${widget.element['KM']} KM"),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 4"),
+                Etiqueta(texto: "Costo del Envío: "),
+                SizedBox(height: 15),
+                Detalle(texto: "S/. ${widget.element['MONTO']}"),
                 SizedBox(height: 35),
-                Container(
-                    child: Row(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: kPrimaryColor, // background
-                        onPrimary: Colors.white, // foreground
-                      ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/principal_conductor', arguments: '1');
-                      },
-                      child: Text(
-                        "MARCAR COMO ENTREGADO",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: kPrimaryColor, // background
-                        onPrimary: Colors.white, // foreground
-                      ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/principal_conductor', arguments: '1');
-                      },
-                      child: Text(
-                        "MARCAR COMO ENTREGADO",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                )),
               ],
             ),
           ),
         ],
       ),
     );
-    return _popupBody;
   }
 }
 

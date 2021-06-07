@@ -499,14 +499,14 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
           ),
         );
         Timer(Duration(seconds: 1),
-            () => Navigator.of(context).pushReplacementNamed('/login'));
+                () => Navigator.of(context).pushReplacementNamed('/login'));
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 10),
             content:
-                Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
+            Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
           ),
         );
         break;

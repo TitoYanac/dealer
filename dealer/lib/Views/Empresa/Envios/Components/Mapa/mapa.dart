@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dealer/Bean/Bean_ficha.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,6 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("antes de setear ubicacion: ${widget.data}");
   }
   @override
   void dispose() {
@@ -39,7 +40,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.data.nombre);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -229,37 +229,59 @@ class _MapScreenState extends State<MapScreen> {
   guardarFicha() async{
       widget.data.coord_origen = "${_origin.position.latitude} , ${_origin.position.longitude}";
       widget.data.coord_destino= "${_destination.position.latitude} , ${_destination.position.longitude}";
+      int costo = 15;
 
+      var dist = _info.totalDistance.split(" ");
 
       var url =
-      Uri.parse('https://dealertesting.000webhostapp.com/empresa/Crear_Envio.php');
+      Uri.parse('https://dealertesting.000webhostapp.com/App_modulos_empresa/App_registrar_envio.php');
       var response =
       await http.post(url, body: {
         'nombre' : widget.data.nombre,
         'apellido' : widget.data.apellido,
         'documento' : widget.data.documento,
         'celular' : widget.data.celular,
+
         'direccion' : widget.data.direccion,
         'distrito' : widget.data.distrito,
+
         'producto' : widget.data.producto,
         'descripcion' : widget.data.descripcion,
         'SizeProduct' : widget.data.SizeProduct,
         'delicado' : widget.data.delicado,
+
         'tipoenvio' : widget.data.tipoenvio,
         'idempresa' : widget.data.idempresa,
         'estado' : widget.data.estado,
+
+        'kilometros':  '${dist[0]}',
         'coord_origen' : widget.data.coord_origen,
         'coord_destino' : widget.data.coord_destino,
-        'totalDistance':_info.totalDistance ,
-      'totalDuration': _info.totalDuration,
+        'costo': '$costo',
       });
 
-      if(response.body!="false"){
-        print(response.body);
-        Navigator.of(context).pushNamed('/principal_empresa', arguments: '1');
-      }else{
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("No se pudo crear el envio")));
+      var data = response.body!='error'?json.decode(response.body):{'0' : "-1"};
+      switch ("${data['0']}") {
+        case "0":
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  "No se pudo registrar"),
+            ),
+          );
+          break;
+        case "1":
+          Navigator.of(context).pushNamed('/principal_empresa', arguments: '1');
+          break;
+        default:
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 10),
+              content:
+              Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
+            ),
+          );
+          break;
       }
 
   }

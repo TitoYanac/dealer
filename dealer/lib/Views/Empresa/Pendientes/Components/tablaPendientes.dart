@@ -1,7 +1,6 @@
-
-import 'package:dealer/Views/Condutor/Pendientes/Components/Pendientes/popup.dart';
-import 'package:dealer/Views/Condutor/Pendientes/Components/Pendientes/popup_body.dart';
-import 'package:dealer/Views/Condutor/Pendientes/Components/Pendientes/popup_content.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup_content.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup_body.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +16,6 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.filas);
-    //return Container();
-
     return Column(
       children: widget.filas
           .map(
@@ -44,7 +40,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
           child: ListTile(
             leading: item['TIPO']=="EXPRESS"?Image.asset("assets/icons/icon_moto.png"):item['TIPO']=="SAME DAY"?Image.asset("assets/icons/icon_tipo2.png"):Image.asset("assets/icons/icon_tipo3.png"),
             title: Text("${item['CLIENTE_NOMBRE']} ${item['CLIENTE_APELLIDO']}"),
-            subtitle: Text("${item['ORIGEN']} → ${item['DESTINO']}"),
+            subtitle: Text("${miDistritos[int.parse(item['ORIGEN_ID_DISTRITO'])]} → ${miDistritos[int.parse(item['DESTINO_ID_DISTRITO'])]}"),
             trailing: Text("1h 6m"),
             dense: true,
             onTap: (){
@@ -72,7 +68,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
               backgroundColor: kPrimaryColor,
               title: Row(
                 children: [
-                  Text(fila["ORIGEN"]),
+                  Text("${miDistritos[int.parse(fila['ORIGEN_ID_DISTRITO'])]}"),
                   Expanded(
                       child: Center(
                           child: Icon(
@@ -82,7 +78,7 @@ class _DataTablePendientesState extends State<DataTablePendientes> {
                   Container(
                       padding: EdgeInsets.only(right: 20),
                       child: Text(
-                        fila["DESTINO"],
+                        "${miDistritos[int.parse(fila['DESTINO_ID_DISTRITO'])]}",
                         textAlign: TextAlign.right,
                       )),
                 ],

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:dealer/Bean/Bean_ficha.dart';
-import 'package:http/http.dart' as http;
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,60 +26,12 @@ class Animal {
 
 class _PopUpBodyState extends State<PopUpBody> {
 
-  List distritos = [
-    "Ancón",
-    "Ate Vitarte",
-    "Barranco",
-    "Breña",
-    "Carabayllo",
-    "Chaclacayo",
-    "Chorrillos",
-    "Cieneguilla",
-    "Comas",
-    "El Agustino",
-    "Independencia",
-    "Jesús María",
-    "La Molina",
-    "La Victoria",
-    "Cercado de Lima",
-    "Lince",
-    "Los Olivos",
-    "Lurigancho",
-    "Lurín",
-    "Magdalena del Mar",
-    "Miraflores",
-    "Pachacamac",
-    "Pucusana",
-    "Pueblo Libre",
-    "Puente Piedra",
-    "Punta Hermosa",
-    "Punta Negra",
-    "Rímac",
-    "San Bartolo",
-    "San Borja",
-    "San Isidro",
-    "San Juan de Lurigancho",
-    "San Juan de Miraflores",
-    "San Luis",
-    "San Martín de Porres",
-    "San Miguel",
-    "Santa Anita",
-    "Santa María del Mar",
-    "Santa Rosa",
-    "Santiago de Surco",
-    "Surquillo",
-    "Villa El Salvador",
-    "Villa María del Triunfo",
-  ];
-
   List<String> miUsuario;
   String tipoenvio = "";
   String idempresa = "";
-  String estado_ficha = "PENDIENTE";
-  String coord_origen = "";
-  String coord_destino = "";
-
-  String miDistrito = "";
+  String estadoFicha = "ASIGNADO";
+  String coordOrigen = "";
+  String coordDestino = "";
 
   bool checkSize0 = false;
   bool checkSize1 = false;
@@ -88,29 +39,26 @@ class _PopUpBodyState extends State<PopUpBody> {
   bool checkSize4 = false;
   bool checkSize5 = false;
 
-  String SizeProduct = "";
+  String sizeProduct = "";
   String delicado = "";
-  final _key_CrearEnvio = GlobalKey<FormState>();
+  final _keyCrearEnvio = GlobalKey<FormState>();
 
-  final TextEditingController nombre_cliente = new TextEditingController();
-  final TextEditingController apellido_cliente = new TextEditingController();
-  final TextEditingController dni_cliente = new TextEditingController();
-  final TextEditingController celular_cliente = new TextEditingController();
-  final TextEditingController direccion_cliente = new TextEditingController();
-  final TextEditingController dist_cliente = new TextEditingController();
-  String distrito_cliente;
-  final TextEditingController producto_cliente = new TextEditingController();
-  final TextEditingController producto_size = new TextEditingController();
-  final TextEditingController Estado_producto = new TextEditingController();
-  final TextEditingController descripcion_producto =
-      new TextEditingController();
+  final TextEditingController nombre = new TextEditingController();
+  final TextEditingController apellido = new TextEditingController();
+  final TextEditingController dni = new TextEditingController();
+  final TextEditingController celular = new TextEditingController();
+  final TextEditingController direccion = new TextEditingController();
+  final TextEditingController dist = new TextEditingController();
+  String miDistrito;
+  final TextEditingController producto = new TextEditingController();
+  final TextEditingController size = new TextEditingController();
+  final TextEditingController estado = new TextEditingController();
+  final TextEditingController descripcion = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // Crea un widget Form usando el _key_AceptarEnvio que creamos anteriormente
-
     return Form(
-      key: _key_CrearEnvio,
+      key: _keyCrearEnvio,
       child: ListView(
         children: <Widget>[
           Padding(
@@ -129,7 +77,7 @@ class _PopUpBodyState extends State<PopUpBody> {
               Expanded(
                 child: Container(
                   child: TextFormField(
-                    controller: nombre_cliente,
+                    controller: nombre,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -144,7 +92,7 @@ class _PopUpBodyState extends State<PopUpBody> {
               Expanded(
                 child: Container(
                   child: TextFormField(
-                    controller: apellido_cliente,
+                    controller: apellido,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -164,7 +112,7 @@ class _PopUpBodyState extends State<PopUpBody> {
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
-                    controller: dni_cliente,
+                    controller: dni,
                     keyboardType: TextInputType.number,
                     maxLength: 8,
                     textAlign: TextAlign.center,
@@ -180,7 +128,7 @@ class _PopUpBodyState extends State<PopUpBody> {
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
-                    controller: celular_cliente,
+                    controller: celular,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     maxLength: 9,
@@ -196,7 +144,7 @@ class _PopUpBodyState extends State<PopUpBody> {
           ),
           Container(
             child: TextFormField(
-              controller: direccion_cliente,
+              controller: direccion,
               decoration: InputDecoration(
                 hintText: "Direccion",
                 hintStyle: TextStyle(color: Colors.grey),
@@ -218,7 +166,7 @@ class _PopUpBodyState extends State<PopUpBody> {
               hint: Container(
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  "-- Seleccionar Distrito --",
+                  "-- Seleccionar miDistrito --",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: kPrimaryColor),
                 ),
@@ -235,20 +183,20 @@ class _PopUpBodyState extends State<PopUpBody> {
                 color: Colors.black,
                 fontSize: 22,
               ),
-              value: distrito_cliente,
+              value: miDistrito,
               onChanged: (newValue) {
                 setState(() {
-                  distrito_cliente = newValue;
+                  miDistrito = newValue;
                 });
               },
               items: [
-                for (int i = 0; i < distritos.length; i++)
+                for (int i = 0; i < miDistritos.length; i++)
                   DropdownMenuItem(
                     value: "$i",
                     child: Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Text(
-                        "${distritos[i]}",
+                        "${miDistritos[i]}",
                         textAlign: TextAlign.center,
                       ),
                       width: MediaQuery.of(context).size.width,
@@ -275,7 +223,7 @@ class _PopUpBodyState extends State<PopUpBody> {
           ),
           Container(
             child: TextFormField(
-              controller: producto_cliente,
+              controller: producto,
               decoration: InputDecoration(
                 hintText: "Producto que se envia",
                 hintStyle: TextStyle(color: Colors.grey),
@@ -287,7 +235,7 @@ class _PopUpBodyState extends State<PopUpBody> {
           Container(
             margin: EdgeInsets.all(20.0),
             child: TextFormField(
-              controller: descripcion_producto,
+              controller: descripcion,
               decoration: InputDecoration(
                 hintText: "Descripcion del producto",
                 hintStyle: TextStyle(color: Colors.grey),
@@ -320,7 +268,7 @@ class _PopUpBodyState extends State<PopUpBody> {
                               checkSize0 = true;
                               checkSize1 = false;
                               checkSize2 = false;
-                              SizeProduct = "grande";
+                              sizeProduct = "grande";
                             });
                           }),
                       CheckboxListTile(
@@ -336,7 +284,7 @@ class _PopUpBodyState extends State<PopUpBody> {
                               checkSize0 = false;
                               checkSize1 = true;
                               checkSize2 = false;
-                              SizeProduct = "mediano";
+                              sizeProduct = "mediano";
                             });
                           }),
                       CheckboxListTile(
@@ -352,7 +300,7 @@ class _PopUpBodyState extends State<PopUpBody> {
                               checkSize0 = false;
                               checkSize1 = false;
                               checkSize2 = true;
-                              SizeProduct = "pequeño";
+                              sizeProduct = "pequeño";
                             });
                           }),
                     ],
@@ -410,12 +358,11 @@ class _PopUpBodyState extends State<PopUpBody> {
                     MaterialStateProperty.all<Color>(kPrimaryColor),
               ),
               onPressed: () {
-                if (_key_CrearEnvio.currentState.validate()) {
-                  // Si el formulario es válido, queremos mostrar un Snackbar
+                if (_keyCrearEnvio.currentState.validate()) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text("Creando Envío!")));
 
-                  CrearFicha();
+                  crearFicha();
                 }
               },
               child: Text('INGRESAR ORIGEN Y DESTINO'),
@@ -430,7 +377,7 @@ class _PopUpBodyState extends State<PopUpBody> {
     return true;
   }
 
-  CrearFicha() async {
+  crearFicha() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     miUsuario = preferences.getStringList('miUsuario');
     idempresa = miUsuario[0];
@@ -442,21 +389,21 @@ class _PopUpBodyState extends State<PopUpBody> {
             : "3";
 
     ficha objeto = new ficha(
-      nombre_cliente.text,
-      apellido_cliente.text,
-      dni_cliente.text,
-      celular_cliente.text,
-      direccion_cliente.text,
-      distrito_cliente,
-      producto_cliente.text,
-      descripcion_producto.text,
-      SizeProduct,
+      nombre.text,
+      apellido.text,
+      dni.text,
+      celular.text,
+      direccion.text,
+      miDistrito,
+      producto.text,
+      descripcion.text,
+      sizeProduct,
       delicado,
       tipoenvio,
       idempresa,
-      estado_ficha,
-      coord_origen,
-      coord_destino,
+      estadoFicha,
+      coordOrigen,
+      coordDestino,
       '',
       '',
     );

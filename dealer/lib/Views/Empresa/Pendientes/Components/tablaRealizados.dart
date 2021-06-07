@@ -1,6 +1,6 @@
-import 'package:dealer/Views/Condutor/Pendientes/Components/Realizados/popup.dart';
-import 'package:dealer/Views/Condutor/Pendientes/Components/Realizados/popup_body.dart';
-import 'package:dealer/Views/Condutor/Pendientes/Components/Realizados/popup_content.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup_content.dart';
+import 'package:dealer/Views/Empresa/Pendientes/Components/Pendientes/popup_body.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 
@@ -12,57 +12,47 @@ class DataTableRealizados extends StatefulWidget {
 }
 
 class _DataTableRealizadosState extends State<DataTableRealizados> {
-  Widget renderRealizados() {
+
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: widget.filas
           .map(
             (item) => Container(
-              margin: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: kSecondaryColor.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(3, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: ListTile(
-                leading: Image.asset("assets/images/monitor.png"),
-                title: Text("Nombre del Cliente"),
-                subtitle: Text("Origen → Destino"),
-                trailing: Padding(
-                  padding: const EdgeInsets.only(top:8.0),
-                  child: Column(
-                    children: [
-                      Text("16:42"),
-                      Text("10 Ene"),
-                    ],
-                  ),
-                ),
-                dense: true,
-                onTap: (){
-                  showPopup(context, PopUpBody(element: item), item);
-                },
-              ),
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.grey,
+              width: 2.0,
             ),
-          )
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: kSecondaryColor.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: ListTile(
+            leading: item['TIPO']=="EXPRESS"?Image.asset("assets/icons/icon_moto.png"):item['TIPO']=="SAME DAY"?Image.asset("assets/icons/icon_tipo2.png"):Image.asset("assets/icons/icon_tipo3.png"),
+            title: Text("${item['CLIENTE_NOMBRE']} ${item['CLIENTE_APELLIDO']}"),
+            subtitle: Text("${miDistritos[int.parse(item['ORIGEN_ID_DISTRITO'])]} → ${miDistritos[int.parse(item['DESTINO_ID_DISTRITO'])]}"),
+            trailing: Text("1h 6m"),
+            dense: true,
+            onTap: (){
+              showPopup(context, PopUpBody(element: item), item);
+            },
+          ),
+        ),
+      )
           .toList(),
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return renderRealizados();
   }
-
   showPopup(BuildContext context, Widget widget, Map<String, String> fila,
       {BuildContext popupContext}) {
     Navigator.push(
@@ -78,17 +68,17 @@ class _DataTableRealizadosState extends State<DataTableRealizados> {
               backgroundColor: kPrimaryColor,
               title: Row(
                 children: [
-                  Text(fila["origen"]),
+                  Text("${miDistritos[int.parse(fila['ORIGEN_ID_DISTRITO'])]}"),
                   Expanded(
                       child: Center(
                           child: Icon(
-                    Icons.arrow_forward_sharp,
-                    color: Colors.white,
-                  ))),
+                            Icons.arrow_forward_sharp,
+                            color: Colors.white,
+                          ))),
                   Container(
                       padding: EdgeInsets.only(right: 20),
                       child: Text(
-                        fila["destino"],
+                        "${miDistritos[int.parse(fila['DESTINO_ID_DISTRITO'])]}",
                         textAlign: TextAlign.right,
                       )),
                 ],

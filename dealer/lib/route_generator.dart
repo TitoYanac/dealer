@@ -1,6 +1,5 @@
 import 'package:dealer/Views/Condutor/RegistroConductor/registro_conductor.dart';
 import 'package:dealer/Views/Condutor/principal_conductor.dart';
-import 'package:dealer/Views/Empresa/Mapa/mapa.dart';
 import 'package:dealer/Views/Empresa/RegistroEmpresa/registro_empresa.dart';
 import 'package:dealer/Views/Empresa/principal_empresa.dart';
 import 'package:dealer/Views/LoadingScreen/Screen.dart';
@@ -8,6 +7,7 @@ import 'package:dealer/Views/Login/login.dart';
 import 'package:flutter/material.dart';
 
 import 'Bean/Bean_ficha.dart';
+import 'Views/Empresa/Envios/Components/Mapa/mapa.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

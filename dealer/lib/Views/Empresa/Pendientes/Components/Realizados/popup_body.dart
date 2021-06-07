@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,33 +12,19 @@ class PopUpBody extends StatefulWidget {
 
 class _PopUpBodyState extends State<PopUpBody> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Widget _popupBody = Container(
+    return Container(
       color: Colors.white,
       child: ListView(
         children: [
           Container(
-            margin: EdgeInsets.all(20.0),
             width: double.infinity,
-            height: 200.0,
-            child: Center(
-              child: Image.asset("assets/images/logo_normal.png"),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.grey,
-                width: 2.0,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
+            child: Image.asset("assets/images/cliente.jpg"),
           ),
           Container(
             margin: EdgeInsets.all(30.0),
@@ -55,64 +40,44 @@ class _PopUpBodyState extends State<PopUpBody> {
                   texto: "Tienda: ",
                 ),
                 SizedBox(height: 5),
-                Detalle(texto: "SODIMAC S.A."),
+                Detalle(texto: "${widget.element['EMPRESA']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección de la Tienda: "),
                 SizedBox(height: 5),
-                Detalle(
-                    texto:
-                        "Jiron Cajamarquilla con, San Juan de Lurigancho 15427"),
+                Detalle(texto: "${widget.element['DIR_ORIGEN']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Cliente: "),
                 SizedBox(height: 5),
-                Detalle(texto: "Tito Jesús Yánac Saldaña"),
+                Detalle(
+                    texto:
+                        "${widget.element['CLIENTE_NOMBRE']} ${widget.element['CLIENTE_APELLIDO']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección del Cliente: "),
                 SizedBox(height: 5),
-                Detalle(texto: "av.malecón checa N°621"),
+                Detalle(texto: "${widget.element['DIR_DESTINO']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Telefono de contacto del cliente: "),
                 SizedBox(height: 15),
-                Detalle(texto: "970576076"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "N° Boleta / Factura: "),
-                SizedBox(height: 15),
-                Detalle(texto: "0041604166-64"),
+                Detalle(texto: "${widget.element['CLIENTE_CELULAR']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Items del Envio: "),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 1"),
+                Detalle(texto: "${widget.element['PRODUCTO']}"),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 2"),
+                Etiqueta(texto: "Distancia del viaje: "),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 3"),
+                Detalle(texto: "${widget.element['KM']} KM"),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 4"),
-                SizedBox(height: 25),
-                Row(children: [
-                  Text("Pago: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-                  Text("S/. 34.60", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24))
-                ]),
+                Etiqueta(texto: "Costo del Envío: "),
                 SizedBox(height: 15),
-                Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: kPrimaryColor, // background
-                        onPrimary: Colors.white, // foreground
-                      ),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed('/principal_conductor', arguments: '1');
-                  },
-                  child: Text("ACEPTAR ENVÍO",style: TextStyle(color: Colors.white),),
-                )),
+                Detalle(texto: "S/. ${widget.element['MONTO']}"),
+                SizedBox(height: 35),
               ],
             ),
           ),
         ],
       ),
     );
-    return _popupBody;
   }
 }
 

@@ -1,6 +1,5 @@
 import 'package:dealer/Views/Empresa/Pendientes/Components/tablaPendientes.dart';
 import 'package:dealer/Views/Empresa/Pendientes/Components/tablaRealizados.dart';
-import 'package:dealer/Views/Empresa/Pendientes/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -12,45 +11,8 @@ class Pendientes extends StatefulWidget {
 }
 
 class _PendientesState extends State<Pendientes> {
-  List<Map<String, String>> pendientes = [
-    {
-      "origen": "LA MOLINA",
-      "t_restamte": "01:41",
-      "destino": "S.J.L.",
-      "tipo": "EXPRESS",
-      "empresa": "SODIMAC S.A."
-    },
-  ];
-  List<Map<String, String>> realizados = [
-    {
-      "origen": "C. DE LIMA",
-      "f_entrega": "21/03/2021 18:42",
-      "destino": "S.J.L.",
-      "tipo": "EXPRESS",
-      "empresa": "SODIMAC S.A."
-    },
-    {
-      "origen": "C. DE LIMA",
-      "f_entrega": "21/03/2021 18:42",
-      "destino": "S.J.L.",
-      "tipo": "EXPRESS",
-      "empresa": "SODIMAC S.A."
-    },
-    {
-      "origen": "C. DE LIMA",
-      "f_entrega": "21/03/2021 18:42",
-      "destino": "S.J.L.",
-      "tipo": "EXPRESS",
-      "empresa": "SODIMAC S.A."
-    },
-    {
-      "origen": "C. DE LIMA",
-      "f_entrega": "21/03/2021 18:42",
-      "destino": "S.J.L.",
-      "tipo": "EXPRESS",
-      "empresa": "SODIMAC S.A."
-    },
-  ];
+  List<Map<String, String>> pendientes = [];
+  List<Map<String, String>> realizados = [];
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -72,19 +34,17 @@ class _PendientesState extends State<Pendientes> {
           ),
         ),
         FutureBuilder(
-            future:   ConseguirDatos(),
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.done){
+            future: conseguirDatosPendientes(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   margin: EdgeInsets.all(15.0),
                   child: DataTablePendientes(filas: pendientes),
                 );
-              }else{
-                return CircularProgressIndicator();
+              } else {
+                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator()));
               }
-            })
-        ,
-
+            }),
         Container(
           margin: EdgeInsets.only(
             top: 25,
@@ -101,49 +61,98 @@ class _PendientesState extends State<Pendientes> {
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(15.0),
-          child: DataTableRealizados(filas: realizados),
-        ),
+        FutureBuilder(
+            future: conseguirDatosRealizados(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Container(
+                  margin: EdgeInsets.all(15.0),
+                  child: DataTableRealizados(filas: realizados),
+                );
+              } else {
+                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator()));
+              }
+            }),
       ],
     );
   }
 
-  Future ConseguirDatos() async {
-    var url = Uri.parse('https://dealertesting.000webhostapp.com/empresa/Mostrar_EnviosPendientes.php');
+  Future conseguirDatosPendientes() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    List<String> Empresa = preferences.getStringList('miUsuario');
-    var response = await http.post(url, body: { 'idEmpresa': Empresa[0] });
+    List<String> empresa = preferences.getStringList('miUsuario');
+
+    var url = Uri.parse(
+        'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_mostrar_envios_asignados.php');
+    var response = await http.post(url, body: {'id_Empresa': empresa[0]});
+
     List<dynamic> milista = json.decode(response.body);
 
+    pendientes = [];
 
-      pendientes = [];
-
-    for(var item in milista){
-      Map<String,String> aux = new Map<String,String>();
-      aux['ID_FICHA']=item['ID_FICHA'].toString();
-      aux['ID_Empresa']=item['ID_Empresa'];
-      aux['ORIGEN']=item['ORIGEN'];
-      aux['DESTINO']=item['DESTINO'];
-      aux['TIPO']=item['TIPO'];
-      aux['FECHA_CREACION']=item['FECHA_CREACION'];
-      aux['ESTADO']=item['ESTADO'];
-      aux['CLIENTE_NOMBRE']=item['CLIENTE_NOMBRE'];
-      aux['CLIENTE_APELLIDO']=item['CLIENTE_APELLIDO'];
+    for (var item in milista) {
+      Map<String, String> aux = new Map<String, String>();
+      aux = {
+        'ID_FICHA': "${item['ID_FICHA']}",
+        'ID_EMPRESA': "${item['ID_EMPRESA']}",
+        'FECHA_CREACION': "${item['FECHA_CREACION']}",
+        'ESTADO': "${item['ESTADO']}",
+        'MONTO': "${item['MONTO']}",
+        'COORD_ORIGEN': "${item['COORD_ORIGEN']}",
+        'COORD_DESTINO': "${item['COORD_DESTINO']}",
+        'KM': "${item['KM']}",
+        'EMPRESA': "${item['EMPRESA']}",
+        'DIR_ORIGEN': "${item['DIR_ORIGEN']}",
+        'ORIGEN_ID_DISTRITO': "${item['ORIGEN_ID_DISTRITO']}",
+        'DIR_DESTINO': "${item['DIR_DESTINO']}",
+        'DESTINO_ID_DISTRITO': "${item['DESTINO_ID_DISTRITO']}",
+        'TIPO': "${item['TIPO']}",
+        'PRODUCTO': "${item['PRODUCTO']}",
+        'CLIENTE_NOMBRE': "${item['CLIENTE_NOMBRE']}",
+        'CLIENTE_APELLIDO': "${item['CLIENTE_APELLIDO']}",
+        'CLIENTE_CELULAR': "${item['CLIENTE_CELULAR']}"
+      };
       pendientes.add(aux);
     }
+    return pendientes;
+  }
+  Future conseguirDatosRealizados() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String> empresa = preferences.getStringList('miUsuario');
 
+    var url = Uri.parse(
+        'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_mostrar_envios_realizados.php');
+    var response = await http.post(url, body: {'id_Empresa': empresa[0]});
 
-    return json.decode(response.body);
+    List<dynamic> milista = json.decode(response.body);
+
+    realizados = [];
+
+    for (var item in milista) {
+      Map<String, String> aux = new Map<String, String>();
+      aux = {
+        'ID_FICHA': "${item['ID_FICHA']}",
+        'ID_EMPRESA': "${item['ID_EMPRESA']}",
+        'FECHA_CREACION': "${item['FECHA_CREACION']}",
+        'ESTADO': "${item['ESTADO']}",
+        'MONTO': "${item['MONTO']}",
+        'COORD_ORIGEN': "${item['COORD_ORIGEN']}",
+        'COORD_DESTINO': "${item['COORD_DESTINO']}",
+        'KM': "${item['KM']}",
+        'EMPRESA': "${item['EMPRESA']}",
+        'DIR_ORIGEN': "${item['DIR_ORIGEN']}",
+        'ORIGEN_ID_DISTRITO': "${item['ORIGEN_ID_DISTRITO']}",
+        'DIR_DESTINO': "${item['DIR_DESTINO']}",
+        'DESTINO_ID_DISTRITO': "${item['DESTINO_ID_DISTRITO']}",
+        'TIPO': "${item['TIPO']}",
+        'PRODUCTO': "${item['PRODUCTO']}",
+        'CLIENTE_NOMBRE': "${item['CLIENTE_NOMBRE']}",
+        'CLIENTE_APELLIDO': "${item['CLIENTE_APELLIDO']}",
+        'CLIENTE_CELULAR': "${item['CLIENTE_CELULAR']}"
+      };
+      realizados.add(aux);
+    }
+    return realizados;
+
   }
 
-
-
-
-
 }
-
-
-/*
-*
-* */
