@@ -1,5 +1,6 @@
 import 'package:dealer/Views/Empresa/Pendientes/Components/tablaPendientes.dart';
 import 'package:dealer/Views/Empresa/Pendientes/Components/tablaRealizados.dart';
+import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -42,7 +43,7 @@ class _PendientesState extends State<Pendientes> {
                   child: DataTablePendientes(filas: pendientes),
                 );
               } else {
-                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator()));
+                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(kPrimaryColor),)));
               }
             }),
         Container(
@@ -70,7 +71,7 @@ class _PendientesState extends State<Pendientes> {
                   child: DataTableRealizados(filas: realizados),
                 );
               } else {
-                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator()));
+                return Center(child: Container(width:50,height: 50,child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(kPrimaryColor),)));
               }
             }),
       ],

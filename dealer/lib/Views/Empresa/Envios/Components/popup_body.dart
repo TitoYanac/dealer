@@ -49,7 +49,7 @@ class _PopUpBodyState extends State<PopUpBody> {
   final TextEditingController celular = new TextEditingController();
   final TextEditingController direccion = new TextEditingController();
   final TextEditingController dist = new TextEditingController();
-  String miDistrito;
+  String miActualDistrito;
   final TextEditingController producto = new TextEditingController();
   final TextEditingController size = new TextEditingController();
   final TextEditingController estado = new TextEditingController();
@@ -166,7 +166,7 @@ class _PopUpBodyState extends State<PopUpBody> {
               hint: Container(
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  "-- Seleccionar miDistrito --",
+                  "-- Seleccionar Distrito --",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: kPrimaryColor),
                 ),
@@ -183,20 +183,20 @@ class _PopUpBodyState extends State<PopUpBody> {
                 color: Colors.black,
                 fontSize: 22,
               ),
-              value: miDistrito,
+              value: miActualDistrito,
               onChanged: (newValue) {
                 setState(() {
-                  miDistrito = newValue;
+                  miActualDistrito = newValue;
                 });
               },
               items: [
-                for (int i = 0; i < miDistritos.length; i++)
+                for (int i = 0; i < miDistrito.length; i++)
                   DropdownMenuItem(
                     value: "$i",
                     child: Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Text(
-                        "${miDistritos[i]}",
+                        "${miDistrito[i]}",
                         textAlign: TextAlign.center,
                       ),
                       width: MediaQuery.of(context).size.width,
@@ -394,7 +394,7 @@ class _PopUpBodyState extends State<PopUpBody> {
       dni.text,
       celular.text,
       direccion.text,
-      miDistrito,
+      miActualDistrito,
       producto.text,
       descripcion.text,
       sizeProduct,

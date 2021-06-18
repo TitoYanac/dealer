@@ -10,7 +10,10 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
-    redireccionar();
+    getPreferences().then((value){
+      print (value);
+        redireccionar(value);
+    });
     super.initState();
   }
 
@@ -47,9 +50,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
       ),
     );
   }
-  redireccionar() async{
+
+  getPreferences() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    switch (preferences.getString('Tipo')) {
+    return preferences.getString('tipo');
+  }
+  redireccionar(String tipo) async{
+    switch (tipo) {
       case '0':
         Navigator.of(context)
             .pushNamed('/principal_conductor', arguments: '0');
@@ -62,6 +69,5 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 () => Navigator.of(context).pushReplacementNamed('/login'));
         break;
     }
-
   }
 }

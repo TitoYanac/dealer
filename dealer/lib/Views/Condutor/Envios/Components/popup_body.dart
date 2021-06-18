@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PopUpBody extends StatefulWidget {
-  final envios element;
+  final Map<String, dynamic> element;
   const PopUpBody({Key key, this.element}) : super(key: key);
   @override
   _PopUpBodyState createState() => _PopUpBodyState();
@@ -16,7 +16,7 @@ class PopUpBody extends StatefulWidget {
 class _PopUpBodyState extends State<PopUpBody> {
   @override
   Widget build(BuildContext context) {
-    print(widget.element.Nombre_Comercial);
+    print(widget.element);
 
     Widget _popupBody = Container(
       color: Colors.white,
@@ -32,30 +32,30 @@ class _PopUpBodyState extends State<PopUpBody> {
                   texto: "EMPRESA: ",
                 ),
                 SizedBox(height: 5),
-                Detalle(texto: widget.element.Nombre_Comercial),
+                Detalle(texto: widget.element['EMPRESA']),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección para RECOGER el envío: "),
                 SizedBox(height: 5),
                 Detalle(
                     texto:
-                    widget.element.ORIGEN),
+                    widget.element['DIR_ORIGEN']),
 
                 SizedBox(height: 15),
                 Etiqueta(texto: "Dirección para ENTREGAR el envío: "),
                 SizedBox(height: 5),
-                Detalle(texto: widget.element.DESTINO),
+                Detalle(texto: widget.element['DIR_DESTINO']),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Cliente: "),
                 SizedBox(height: 5),
-                Detalle(texto: "Tito Jesús Yánac Saldaña"),
+                Detalle(texto: "${widget.element['CLIENTE_NOMBRE']} ${widget.element['CLIENTE_APELLIDO']}"),
                 SizedBox(height: 15),
                 Etiqueta(texto: "Producto que se envía: "),
                 SizedBox(height: 15),
-                Detalle(texto: "Producto 1"),
+                Detalle(texto: widget.element['PRODUCTO']),
                 SizedBox(height: 25),
                 Row(children: [
                   Text("Pago: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-                  Text("S/. 34.60", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24))
+                  Text("S/. ${widget.element['MONTO']}", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24))
                 ]),
                 SizedBox(height: 15),
                 Center(
@@ -76,7 +76,11 @@ class _PopUpBodyState extends State<PopUpBody> {
         ],
       ),
     );
+
     return _popupBody;
+
+
+
   }
 }
 

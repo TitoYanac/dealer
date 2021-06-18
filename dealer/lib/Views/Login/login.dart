@@ -38,31 +38,7 @@ class _LoginState extends State<Login> {
     var url = Uri.parse('https://dealertesting.000webhostapp.com/login.php');
     var response =
         await http.post(url, body: {'correo': correo.text, 'pass': pass.text});
-
-    var data = json.decode(response.body);
-    print(data);
-    if (data['FALSE'] != '0') {
-      print("entro if");
-      miUsuario = [];
-      int size = data.length;
-      for (int i = 0; i < size/2; i++) {
-        miUsuario.add("${data['$i']}");
-
-      }
-      if(data['STATUS']=='1'){
-        setState(() {
-          tipo = data['TIPO'];
-        });
-        guardarPreferencias();
-      }else{
-        setState(() {
-          tipo = "-2";
-        });
-      }
-    } else {
-      tipo = "-1";
-    }
-    redireccionar();
+    redireccionar( response );
   }
 
   @override
@@ -369,7 +345,33 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void redireccionar() {
+  void redireccionar(response) {
+    if(response.body=='false'){
+      tipo = "-3";
+    }else{
+        var data = json.decode(response.body);
+        if (data['FALSE'] != '0') {
+          miUsuario = [];
+          int size = data.length;
+          for (int i = 0; i < size/2; i++) {
+            miUsuario.add("${data['$i']}");
+          }
+          if(data['STATUS']=='1'){
+            setState(() {
+              tipo = data['TIPO'];
+            });
+            guardarPreferencias();
+          }else{
+            setState(() {
+              tipo = "-2";
+            });
+          }
+        } else {
+          tipo = "-1";
+        }
+    }
+
+
     switch (tipo) {
       case '0':
         Navigator.of(context).pushNamed('/principal_conductor', arguments: '0');
@@ -385,6 +387,14 @@ class _LoginState extends State<Login> {
           ),
         );
         break;
+      case '-3':
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error en el servidor espere unos minutos!"),
+            duration: Duration(seconds: 10),
+          ),
+        );
+        break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -394,6 +404,11 @@ class _LoginState extends State<Login> {
         );
         break;
     }
+
+
+
+
+
   }
 
   imprimirPreferencias() async {

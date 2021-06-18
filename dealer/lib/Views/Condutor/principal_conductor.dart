@@ -1,8 +1,7 @@
-import 'package:dealer/Views/Condutor/Envios/envios.dart';
+import 'package:dealer/Views/Condutor/Envios/envios_disponibles.dart';
 import 'package:dealer/Views/Condutor/Pagos/pagos.dart';
 import 'package:dealer/Views/Condutor/Pendientes/pendientes.dart';
 import 'package:dealer/Views/Condutor/Perfil/perfil.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dealer/constats.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,12 +25,11 @@ class _PrincipalConductorState extends State<PrincipalConductor> {
             : widget.data == '2'
                 ? 2
                 : 3;
-    //print(_currentindex);
     super.initState();
   }
 
   final views = [
-    Envios(),
+    EnviosDisponibles(),
     Pendientes(),
     Pagos(initialDate: DateTime.now()),
     Perfil(),

@@ -40,7 +40,7 @@ class _DataTableRealizadosState extends State<DataTableRealizados> {
           child: ListTile(
             leading: item['TIPO']=="EXPRESS"?Image.asset("assets/icons/icon_moto.png"):item['TIPO']=="SAME DAY"?Image.asset("assets/icons/icon_tipo2.png"):Image.asset("assets/icons/icon_tipo3.png"),
             title: Text("${item['CLIENTE_NOMBRE']} ${item['CLIENTE_APELLIDO']}"),
-            subtitle: Text("${miDistritos[int.parse(item['ORIGEN_ID_DISTRITO'])]} → ${miDistritos[int.parse(item['DESTINO_ID_DISTRITO'])]}"),
+            subtitle: Text("${miDistrito[int.parse(item['ORIGEN_ID_DISTRITO'])]} → ${miDistrito[int.parse(item['DESTINO_ID_DISTRITO'])]}"),
             trailing: Text("1h 6m"),
             dense: true,
             onTap: (){
@@ -68,7 +68,7 @@ class _DataTableRealizadosState extends State<DataTableRealizados> {
               backgroundColor: kPrimaryColor,
               title: Row(
                 children: [
-                  Text("${miDistritos[int.parse(fila['ORIGEN_ID_DISTRITO'])]}"),
+                  Text("${miDistrito[int.parse(fila['ORIGEN_ID_DISTRITO'])]}"),
                   Expanded(
                       child: Center(
                           child: Icon(
@@ -78,7 +78,7 @@ class _DataTableRealizadosState extends State<DataTableRealizados> {
                   Container(
                       padding: EdgeInsets.only(right: 20),
                       child: Text(
-                        "${miDistritos[int.parse(fila['DESTINO_ID_DISTRITO'])]}",
+                        "${miDistrito[int.parse(fila['DESTINO_ID_DISTRITO'])]}",
                         textAlign: TextAlign.right,
                       )),
                 ],

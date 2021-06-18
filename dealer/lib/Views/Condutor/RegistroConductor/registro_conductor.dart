@@ -336,9 +336,11 @@ class _RegistroConductorState extends State<RegistroConductor> {
       'status': '0'
     });
 
-    var data = json.decode(response.body);
+
+    var data = response.body==""?{'0':'-1'}:json.decode(response.body);
     print(data);
     print("${data['0']}");
+
     switch("${data['0']}"){
       case "0":
         ScaffoldMessenger.of(context).showSnackBar(

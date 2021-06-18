@@ -259,8 +259,8 @@ class _MapScreenState extends State<MapScreen> {
         'coord_destino' : widget.data.coord_destino,
         'costo': '$costo',
       });
-
       var data = response.body!='error'?json.decode(response.body):{'0' : "-1"};
+      print(data);
       switch ("${data['0']}") {
         case "0":
           ScaffoldMessenger.of(context).showSnackBar(

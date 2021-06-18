@@ -7,7 +7,7 @@ const kThirdColor = Color.fromRGBO(229, 226, 225, 1);
 const String img1 = "assets/images/banner_login.png";
 const String img2 = "assets/images/logo_normal.png";
 
-List miDistritos = [
+List miDistrito = [
   "Ancón",
   "Ate Vitarte",
   "Barranco",
@@ -22,12 +22,12 @@ List miDistritos = [
   "Jesús María",
   "La Molina",
   "La Victoria",
-  "Cercado de Lima",
+  "C. de Lima",
   "Lince",
   "Los Olivos",
   "Lurigancho",
   "Lurín",
-  "Magdalena del Mar",
+  "M. del Mar",
   "Miraflores",
   "Pachacamac",
   "Pucusana",
@@ -39,16 +39,17 @@ List miDistritos = [
   "San Bartolo",
   "San Borja",
   "San Isidro",
-  "San Juan de Lurigancho",
-  "San Juan de Miraflores",
+  "S.J.L",
+  "S.J.M",
   "San Luis",
-  "San Martín de Porres",
+  "S.M.P",
   "San Miguel",
   "Santa Anita",
-  "Santa María del Mar",
+  "S.M. del Mar",
   "Santa Rosa",
-  "Santiago de Surco",
+  "S.Surco",
   "Surquillo",
-  "Villa El Salvador",
-  "Villa María del Triunfo",
+  "V. El Salvador",
+  "V.M.T",
 ];
+
