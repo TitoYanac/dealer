@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:dealer/Bean/Bean_ficha.dart';
+import 'package:dealer/Bean/Bean_empresa_ficha_creada.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +27,6 @@ class Animal {
 class _PopUpBodyState extends State<PopUpBody> {
 
   List<String> miUsuario;
-  String tipoenvio = "";
-  String idempresa = "";
-  String estadoFicha = "ASIGNADO";
-  String coordOrigen = "";
-  String coordDestino = "";
 
   bool checkSize0 = false;
   bool checkSize1 = false;
@@ -41,6 +36,7 @@ class _PopUpBodyState extends State<PopUpBody> {
 
   String sizeProduct = "";
   String delicado = "";
+
   final _keyCrearEnvio = GlobalKey<FormState>();
 
   final TextEditingController nombre = new TextEditingController();
@@ -358,12 +354,15 @@ class _PopUpBodyState extends State<PopUpBody> {
                     MaterialStateProperty.all<Color>(kPrimaryColor),
               ),
               onPressed: () {
+                crearFicha();
+                /*
                 if (_keyCrearEnvio.currentState.validate()) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text("Creando Envío!")));
 
                   crearFicha();
                 }
+                 */
               },
               child: Text('INGRESAR ORIGEN Y DESTINO'),
             ),
@@ -380,38 +379,29 @@ class _PopUpBodyState extends State<PopUpBody> {
   crearFicha() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     miUsuario = preferences.getStringList('miUsuario');
-    idempresa = miUsuario[0];
-
-    tipoenvio = widget.tipo == "EXPRESS"
+    String id_empresa = miUsuario[0];
+    String id_tipoenvio = widget.tipo == "EXPRESS"
         ? "1"
         : widget.tipo == "SAME DAY"
             ? "2"
-            : "3";
+            : widget.tipo == "NEXT DAY"? "3" : "-1";
 
-    ficha objeto = new ficha(
-      nombre.text,
-      apellido.text,
-      dni.text,
-      celular.text,
-      direccion.text,
-      miActualDistrito,
-      producto.text,
-      descripcion.text,
-      sizeProduct,
-      delicado,
-      tipoenvio,
-      idempresa,
-      estadoFicha,
-      coordOrigen,
-      coordDestino,
-      '',
-      '',
-    );
+    empresa_ficha_creada objeto = new empresa_ficha_creada(
+        nombre.text,
+        apellido.text,
+        dni.text,
+        celular.text,
+        direccion.text,
+        "${int.parse(miActualDistrito)+1}",
+        producto.text,
+        descripcion.text,
+        sizeProduct,
+        delicado,
+        id_tipoenvio,
+        id_empresa);
 
-    Timer(
-        Duration(seconds: 1),
-            () => Navigator.of(context)
-            .pushReplacementNamed('/mapa', arguments: objeto));
+    Navigator.of(context)
+            .pushReplacementNamed('/mapa', arguments: objeto);
 
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dealer/Bean/Bean_ficha.dart';
+import 'package:dealer/Bean/Bean_empresa_ficha_creada.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 import 'directions_model.dart';
@@ -10,7 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class MapScreen extends StatefulWidget {
-  final ficha data;
+  final empresa_ficha_creada data;
   const MapScreen({Key key, this.data}) : super(key: key);
 
   @override
@@ -227,9 +227,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   guardarFicha() async{
-      widget.data.coord_origen = "${_origin.position.latitude} , ${_origin.position.longitude}";
-      widget.data.coord_destino= "${_destination.position.latitude} , ${_destination.position.longitude}";
-      int costo = 15;
 
       var dist = _info.totalDistance.split(" ");
 
@@ -243,22 +240,25 @@ class _MapScreenState extends State<MapScreen> {
         'celular' : widget.data.celular,
 
         'direccion' : widget.data.direccion,
-        'distrito' : widget.data.distrito,
+        'id_distrito' : widget.data.distrito,
 
         'producto' : widget.data.producto,
+        'delicado' : widget.data.delicado,
         'descripcion' : widget.data.descripcion,
         'SizeProduct' : widget.data.SizeProduct,
-        'delicado' : widget.data.delicado,
 
-        'tipoenvio' : widget.data.tipoenvio,
-        'idempresa' : widget.data.idempresa,
-        'estado' : widget.data.estado,
+        'id_tipoenvio' : widget.data.tipoenvio,
+        'id_empresa' : widget.data.idempresa,
 
-        'kilometros':  '${dist[0]}',
-        'coord_origen' : widget.data.coord_origen,
-        'coord_destino' : widget.data.coord_destino,
-        'costo': '$costo',
+        'coord_origen' : "${_origin.position.latitude},${_origin.position.longitude}",
+        'coord_destino' : "${_destination.position.latitude},${_destination.position.longitude}",
+        'km':  '${dist[0]}',
       });
+      print ("${widget.data.nombre}, ${widget.data.apellido}, ${widget.data.documento}, ${widget.data.celular}, ${widget.data.direccion}, ${widget.data.distrito}, ${widget.data.producto}, ${widget.data.delicado}, ${widget.data.descripcion}, ${widget.data.SizeProduct}, ${widget.data.tipoenvio}, ${widget.data.idempresa}, ${_origin.position.latitude},${_origin.position.longitude}, ${_destination.position.latitude},${_destination.position.longitude}, ${ '${dist[0]}'}");
+      print( response.body );
+
+      print("id_distrito: ${widget.data.distrito}");
+
       var data = response.body!='error'?json.decode(response.body):{'0' : "-1"};
       print(data);
       switch ("${data['0']}") {
@@ -283,6 +283,7 @@ class _MapScreenState extends State<MapScreen> {
           );
           break;
       }
+
 
   }
 }

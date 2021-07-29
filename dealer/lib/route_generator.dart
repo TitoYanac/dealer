@@ -6,7 +6,7 @@ import 'package:dealer/Views/LoadingScreen/Screen.dart';
 import 'package:dealer/Views/Login/login.dart';
 import 'package:flutter/material.dart';
 
-import 'Bean/Bean_ficha.dart';
+import 'Bean/Bean_empresa_ficha_creada.dart';
 import 'Views/Empresa/Envios/Components/Mapa/mapa.dart';
 
 class RouteGenerator {
@@ -57,7 +57,7 @@ class RouteGenerator {
         }
         return _errorRoute();
       case '/mapa':
-        if (args is ficha) {
+        if (args is empresa_ficha_creada) {
           return MaterialPageRoute(
             builder: (_) => MapScreen(
               data: args,

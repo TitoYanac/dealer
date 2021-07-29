@@ -24,9 +24,13 @@ class _RegistroConductorState extends State<RegistroConductor> {
   TextEditingController nombre;
   TextEditingController apellido;
   TextEditingController correo;
-  TextEditingController celular;
   TextEditingController pass1;
   TextEditingController pass2;
+  String tipo;
+  String terminos;
+  TextEditingController dni;
+  TextEditingController celular;
+  String estado_cuenta;
   @override
   void initState() {
     _passwordVisible = false;
@@ -35,9 +39,13 @@ class _RegistroConductorState extends State<RegistroConductor> {
     nombre = new TextEditingController();
     apellido = new TextEditingController();
     correo = new TextEditingController();
-    celular = new TextEditingController();
     pass1 = new TextEditingController();
     pass2 = new TextEditingController();
+    tipo = "1";
+    terminos = "0";
+    dni = new TextEditingController();
+    celular = new TextEditingController();
+    estado_cuenta = "0";
     super.initState();
   }
 
@@ -88,6 +96,8 @@ class _RegistroConductorState extends State<RegistroConductor> {
                       child: Container(
                         margin: EdgeInsets.only(right: 10),
                         child: TextFormField(
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.text,
                           controller: nombre,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -108,6 +118,7 @@ class _RegistroConductorState extends State<RegistroConductor> {
                         margin: EdgeInsets.only(left: 10),
                         child: TextFormField(
                           textAlign: TextAlign.center,
+                          keyboardType: TextInputType.text,
                           controller: apellido,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -131,32 +142,36 @@ class _RegistroConductorState extends State<RegistroConductor> {
                 Row(
                   children: [
                     Flexible(
-                      flex: 7,
+                      flex: 1,
                       child: Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: EdgeInsets.only(left: 10),
                         child: TextFormField(
-                          controller: correo,
+                          textAlign: TextAlign.center,
+                          controller: dni,
+                          keyboardType: TextInputType.number,
+                          maxLength: 8,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: kPrimaryColor),
                             ),
-                            hintText: "CORREO",
+                            hintText: "DNI",
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
                           validator: (value) {
-                            return value.isEmpty ? 'Campo Obligatorio' : RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)?null:'Correo no válido';
+                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=8?'Son 8 Dígitos':null;
                           },
                         ),
                       ),
                     ),
                     Flexible(
-                      flex: 5,
+                      flex: 1,
                       child: Container(
                         margin: EdgeInsets.only(left: 10),
                         child: TextFormField(
                           textAlign: TextAlign.center,
                           controller: celular,
                           keyboardType: TextInputType.number,
+                          maxLength: 9,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: kPrimaryColor),
@@ -174,6 +189,29 @@ class _RegistroConductorState extends State<RegistroConductor> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 300,
+                      margin: EdgeInsets.only(right: 10),
+                      child: TextFormField(
+                        controller: correo,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                          ),
+                          hintText: "CORREO",
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
+                        validator: (value) {
+                          return value.isEmpty ? 'Campo Obligatorio' : RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)?null:'Correo no válido';
+                        },
+                      ),
+                    ),
+                   ],
                 ),
                 TextFormField(
                   keyboardType: TextInputType.text,
@@ -270,6 +308,11 @@ class _RegistroConductorState extends State<RegistroConductor> {
                     onChanged: (bool value) {
                       setState(() {
                         _checked = value;
+                        if(_checked){
+                          terminos = "1";
+                        }else{
+                          terminos = "0";
+                        }
                       });
                     },
                     activeColor: kPrimaryColor,
@@ -314,26 +357,30 @@ class _RegistroConductorState extends State<RegistroConductor> {
   }
 
   Future registrarConductor() async {
-/*
-    print(nombre.text);
-    print(apellido.text);
-    print(correo.text);
-    print(celular.text);
-    print(pass1.text);
-    print(1);
-    print(0);
-
-*/
+    /*
+    print("nombre: ${nombre.text}");
+    print("apellido: ${apellido.text}");
+    print("correo: ${correo.text}");
+    print("pass1: ${pass1.text}");
+    print("pass2: ${pass2.text}");
+    print("tipo: ${tipo}");
+    print("terminos: ${terminos}");
+    print("dni: ${dni.text}");
+    print("celular: ${celular.text}");
+    print("estado_cuenta: ${estado_cuenta}");
+  */
     var url = Uri.parse(
         'https://dealertesting.000webhostapp.com/App_modulos_conductor/App_registrar_conductor.php');
     var response = await http.post(url, body: {
-      'nombre': nombre.text,
-      'apellido': apellido.text,
-      'correo': correo.text,
-      'celular': celular.text,
-      'passw': pass1.text,
-      'tipo': '0',
-      'status': '0'
+      'nombre' : nombre.text,
+      'apellido' : apellido.text,
+      'correo' : correo.text,
+      'pass' : pass1.text,
+      'tipo' : tipo,
+      'terminos' : terminos,
+      'dni' : dni.text,
+      'celular' : celular.text,
+      'estado_cuenta' : estado_cuenta
     });
 
 
@@ -368,8 +415,6 @@ class _RegistroConductorState extends State<RegistroConductor> {
         break;
     }
 
-
-    
 
   }
 }

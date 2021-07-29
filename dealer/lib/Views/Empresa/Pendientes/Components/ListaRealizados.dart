@@ -1,52 +1,44 @@
 import 'dart:convert';
-
-import 'package:dealer/Bean/Bean_envios.dart';
-import 'package:dealer/Views/Condutor/Envios/Components/popup.dart';
-import 'package:dealer/Views/Condutor/Envios/Components/popup_body.dart';
-import 'package:dealer/Views/Condutor/Envios/Components/popup_content.dart';
+import 'package:http/http.dart' as http;
 import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:http/http.dart' as http;
+import 'Realizados/popup.dart';
+import 'Realizados/popup_body.dart';
+import 'Realizados/popup_content.dart';
 
-class EnviosDisponibles extends StatefulWidget {
+class EnviosRealizados extends StatefulWidget {
   @override
-  _EnviosDisponiblesState createState() => _EnviosDisponiblesState();
+  _EnviosRealizadosState createState() => _EnviosRealizadosState();
 }
 
-class _EnviosDisponiblesState extends State<EnviosDisponibles> {
-  List<envios> ListaEnviosDisponibles = [];
+class _EnviosRealizadosState extends State<EnviosRealizados> {
 
-  Future cargarEnviosDisponibles() async {
+  Future cargarEnviosEnEspera() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String> empresa = preferences.getStringList('miUsuario');
+
     var url = Uri.parse(
-        'https://dealertesting.000webhostapp.com/App_modulos_conductor/App_envios.php');
-    var response = await http.get(url);
+        'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_mostrar_envios_realizados.php');
+    var response = await http.post(url, body: {'id_Empresa': empresa[0]});
     return response;
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //return Container();
-
+  Widget build(BuildContext context){
     return FutureBuilder(
-
-      future: cargarEnviosDisponibles(),
+      future: cargarEnviosEnEspera(),
       builder: (context, response) {
         if (response.connectionState == ConnectionState.done) {
           var data = json.decode(response.data.body);
-
           if (data[0]['FALSE'] != null && data[0]['FALSE'] == '0') {
             return Container(
               child: Center(
                   child: Text(
-                "NO HAY ENVÍOS DISPONIBLES",
-                style: TextStyle(fontSize: 24, color: kPrimaryColor),
-              )),
+                    "NO HAY ENVÍOS FINALIZADOS",
+                    style: TextStyle(fontSize: 24, color: kPrimaryColor),
+                  )),
             );
           } else {
             return ListView.builder(
@@ -97,61 +89,54 @@ class _EnviosDisponiblesState extends State<EnviosDisponibles> {
         }
       },
     );
-
-
   }
-
-
-
-
-
-showPopup(BuildContext context, Widget widget, Map<String, dynamic> fila,
-    {BuildContext popupContext}) {
-  Navigator.push(
-    context,
-    PopupLayout(
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: PopupContent(
-        content: Scaffold(
-          appBar: AppBar(
-            backgroundColor: kPrimaryColor,
-            title: Row(
-              children: [
-                Text("${miDistrito[int.parse(fila['ORIGEN_ID_DISTRITO'])].toUpperCase()}"),
-                Expanded(
-                    child: Center(
-                        child: Icon(
-                          Icons.arrow_forward_sharp,
-                          color: Colors.white,
-                        ))),
-                Container(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Text(
-                      "${miDistrito[int.parse(fila['DESTINO_ID_DISTRITO'])].toUpperCase()}",
-                      textAlign: TextAlign.right,
-                    )),
-              ],
+  showPopup(BuildContext context, Widget widget, Map<String, String> fila,
+      {BuildContext popupContext}) {
+    Navigator.push(
+      context,
+      PopupLayout(
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: PopupContent(
+          content: Scaffold(
+            appBar: AppBar(
+              backgroundColor: kPrimaryColor,
+              title: Row(
+                children: [
+                  Text("${miDistrito[int.parse(fila['ORIGEN_ID_DISTRITO'])]}"),
+                  Expanded(
+                      child: Center(
+                          child: Icon(
+                            Icons.arrow_forward_sharp,
+                            color: Colors.white,
+                          ))),
+                  Container(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Text(
+                        "${miDistrito[int.parse(fila['DESTINO_ID_DISTRITO'])]}",
+                        textAlign: TextAlign.right,
+                      )),
+                ],
+              ),
+              leading: new Builder(builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    try {
+                      Navigator.pop(context); //close the popup
+                    } catch (e) {}
+                  },
+                );
+              }),
+              brightness: Brightness.light,
             ),
-            leading: new Builder(builder: (context) {
-              return IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  try {
-                    Navigator.pop(context); //close the popup
-                  } catch (e) {}
-                },
-              );
-            }),
-            brightness: Brightness.light,
+            // resizeToAvoidBottomPadding: false,
+            body: widget,
           ),
-          // resizeToAvoidBottomPadding: false,
-          body: widget,
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

@@ -1,10 +1,16 @@
-import 'dart:ui';
+
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:dealer/Bean/Bean_empresa_ficha_pendiente.dart';
 import 'package:dealer/constats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopUpBody extends StatefulWidget {
-  final Map<String, String> element;
+  final empresa_ficha_pendiente element;
   const PopUpBody({Key key, this.element}) : super(key: key);
   @override
   _PopUpBodyState createState() => _PopUpBodyState();
@@ -13,142 +19,306 @@ class PopUpBody extends StatefulWidget {
 class _PopUpBodyState extends State<PopUpBody> {
   @override
   void initState() {
-
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: ListView(
-        children: [
-          Container(
-            margin: EdgeInsets.all(20.0),
-            width: double.infinity,
-            height: 200.0,
-            child: Center(
-              child: widget.element['ESTADO']=="ASIGNADO"?Image.asset("assets/images/mapa_default.png"):Text("-- Aun no se ha tomado el envio --"),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.grey,
-                width: 2.0,
+    return ListView(
+      children: [
+        Container(
+          margin: EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Container(
+                      child: Text(
+                        "${widget.element.nombre_empresa.toUpperCase()}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                            color: kPrimaryColor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
+              Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kPrimaryColor, width: 1),
+                      borderRadius: BorderRadius.circular(5),
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        subTituloPopUp("FECHA DE CREACIÓN DEL ENVÍO:"),
+                        textoNornalPopUp(
+                            "${widget.element.fecha_creacion_ficha}"),
+                        subTituloPopUp("ESTADO DEL ENVÍO:"),
+                        textoNornalPopUp("${widget.element.estado}"),
+                        subTituloPopUp("TIPO DE DELIVERY:"),
+                        textoNornalPopUp("${widget.element.tipoenvio}"),
+                        subTituloPopUp("COSTO DEL SERVICIO:"),
+                        textoNornalPopUp("S/. ${widget.element.monto}.00"),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                      left: 50,
+                      top: 10,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            top: 3, bottom: 3, left: 10, right: 10),
+                        color: kPrimaryColor,
+                        child: Text(
+                          'DETALLES DEL SERVICIO',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      )),
+                ],
+              ),
+              Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kPrimaryColor, width: 1),
+                      borderRadius: BorderRadius.circular(5),
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        subTituloPopUp("NOMBRE:"),
+                        textoNornalPopUp(
+                            "${widget.element.nombre_comprador} ${widget.element.apellido_comprador}"),
+                        subTituloPopUp("DOCUMENTO NACIONAL DE IDENTIDAD:"),
+                        textoNornalPopUp(
+                            "${widget.element.documento_comprador}"),
+                        subTituloPopUp("CELULAR:"),
+                        textoNornalPopUp("${widget.element.celular_comprador}"),
+                        subTituloPopUp("DIRECCIÓN DONDE SE LLEVARÁ EL ENVÍO:"),
+                        textoNornalPopUp(
+                            "${widget.element.direccion_comprador}"),
+                        subTituloPopUp("DISTRITO DE DESTINO:"),
+                        textoNornalPopUp(
+                            "${widget.element.distrito_comprador}"),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                      left: 50,
+                      top: 10,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            top: 3, bottom: 3, left: 10, right: 10),
+                        color: kPrimaryColor,
+                        child: Text(
+                          'DATOS DEL CLIENTE',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      )),
+                ],
+              ),
+              Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kPrimaryColor, width: 1),
+                      borderRadius: BorderRadius.circular(5),
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        subTituloPopUp("ITEM QUE SE ESTA ENVIANDO:"),
+                        textoNornalPopUp("${widget.element.producto}"),
+                        subTituloPopUp("DESCRIPCIÓN DE LO QUE SE ENVÍA:"),
+                        textoNornalPopUp("${widget.element.descripcion}"),
+                        subTituloPopUp("TAMAÑO DEL PAQUETE:"),
+                        textoNornalPopUp("${widget.element.SizeProduct}"),
+                        subTituloPopUp("¿EL ITEM QUE SE ENVÍA ES DELICADO?:"),
+                        textoNornalPopUp("${widget.element.delicado}"),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                      left: 50,
+                      top: 10,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            top: 3, bottom: 3, left: 10, right: 10),
+                        color: kPrimaryColor,
+                        child: Text(
+                          'DATOS DEL PRODUCTO',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      )),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        eliminarFicha();
+                      },
+                      child: Text("Cancelar Envío!"),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.fromRGBO(255, 0, 0, 0.8)),
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.fromLTRB(12, 8, 12, 8)),
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 24))),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        try {
+                          Navigator.pop(context); //close the popup
+                        } catch (e) {}
+                      },
+                      child: Text("Todo OK!"),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(kPrimaryColor),
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.fromLTRB(12, 8, 12, 8)),
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 24))),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              )
+            ],
           ),
-          Container(
-            margin: EdgeInsets.all(30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  Text("DATOS DEL ENVÍO",
-                      style: TextStyle(fontWeight: FontWeight.bold))
-                ]),
-                SizedBox(height: 15),
-                Etiqueta(
-                  texto: "Tienda: ",
-                ),
-                SizedBox(height: 5),
-                Detalle(texto: "${widget.element['EMPRESA']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Dirección de la Tienda: "),
-                SizedBox(height: 5),
-                Detalle(
-                    texto:
-                    "${widget.element['DIR_ORIGEN']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Cliente: "),
-                SizedBox(height: 5),
-                Detalle(texto: "${widget.element['CLIENTE_NOMBRE']} ${widget.element['CLIENTE_APELLIDO']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Dirección del Cliente: "),
-                SizedBox(height: 5),
-                Detalle(texto: "${widget.element['DIR_DESTINO']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Telefono de contacto del cliente: "),
-                SizedBox(height: 15),
-                Detalle(texto: "${widget.element['CLIENTE_CELULAR']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Items del Envio: "),
-                SizedBox(height: 15),
-                Detalle(texto: "${widget.element['PRODUCTO']}"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Distancia del viaje: "),
-                SizedBox(height: 15),
-                Detalle(texto: "${widget.element['KM']} KM"),
-                SizedBox(height: 15),
-                Etiqueta(texto: "Costo del Envío: "),
-                SizedBox(height: 15),
-                Detalle(texto: "S/. ${widget.element['MONTO']}"),
-                SizedBox(height: 35),
-              ],
-            ),
+        ),
+      ],
+    );
+  }
+
+  Future eliminarFicha() async{
+
+    var url = Uri.parse(
+        'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_eliminar_envio.php');
+    var response = await http.post(url, body: {'id_ficha': widget.element.id_ficha});
+print(response.body);
+    var data = json.decode(response.body);
+    print(data);
+    print(data["0"]);
+    if (data["0"]=="1"){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Se Eliminó correctamente el Envío."),
+        ),
+      );
+      Timer(Duration(seconds: 1), () => Navigator.of(context).pushNamed('/principal_empresa', arguments: '1'));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Tenemos problemas con el servidor! \n Intentelo más tarde."),
+        ),
+      );
+    }
+
+  }
+}
+
+
+
+class tituloPopUp extends StatelessWidget {
+  tituloPopUp(String this.titulo);
+  String titulo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          child: Text(
+            "$titulo",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: kPrimaryColor),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-class Detalle extends StatefulWidget {
-  final String texto;
-  const Detalle({Key key, this.texto}) : super(key: key);
-  @override
-  _DetalleState createState() => _DetalleState();
-}
+class subTituloPopUp extends StatelessWidget {
+  subTituloPopUp(String this.subtitulo);
+  String subtitulo;
 
-class _DetalleState extends State<Detalle> {
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Container(
-        child: Text(widget.texto),
-        padding: EdgeInsets.all(5.0),
-        width: MediaQuery.of(context).size.width - 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(width: 2.0, color: Colors.grey),
-          boxShadow: [
-            BoxShadow(
-              color: kSecondaryColor,
-              spreadRadius: 0,
-              blurRadius: 7,
-              offset: Offset(3, 3), // changes position of shadow
-            ),
-          ],
+    return Row(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 6),
+          child: Text(
+            "$subtitulo",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.black54),
+          ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 }
 
-class Etiqueta extends StatefulWidget {
-  final String texto;
-  const Etiqueta({Key key, this.texto}) : super(key: key);
-  @override
-  _EtiquetaState createState() => _EtiquetaState();
-}
+class textoNornalPopUp extends StatelessWidget {
+  textoNornalPopUp(String this.texto);
+  String texto;
 
-class _EtiquetaState extends State<Etiqueta> {
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 7),
-        child:
-            Text(widget.texto, style: TextStyle(fontWeight: FontWeight.bold)),
-      )
-    ]);
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 4, 8, 4),
+          child: Text(
+            "$texto",
+            style: TextStyle(fontSize: 16, color: Colors.black45),
+          ),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: kPrimaryColor, width: 2),
+              right: BorderSide(color: kPrimaryColor, width: 2),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

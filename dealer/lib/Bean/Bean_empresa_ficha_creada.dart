@@ -1,4 +1,4 @@
-class ficha {
+class empresa_ficha_creada {
   String nombre;
   String apellido;
   String documento;
@@ -11,12 +11,8 @@ class ficha {
   String delicado;
   String tipoenvio;
   String idempresa;
-  String estado;
-  String coord_origen;
-  String coord_destino;
-  String totalDistance;
-  String totalDuration;
-  ficha(
+
+  empresa_ficha_creada(
     this.nombre,
     this.apellido,
     this.documento,
@@ -28,14 +24,9 @@ class ficha {
     this.SizeProduct,
     this.delicado,
     this.tipoenvio,
-    this.idempresa,
-    this.estado,
-    this.coord_origen,
-    this.coord_destino,
-    this.totalDistance,
-    this.totalDuration,
+    this.idempresa
   );
-  ficha.fromJson(Map<String, dynamic> json) {
+  empresa_ficha_creada.fromJson(Map<String, dynamic> json) {
     nombre = json['nombre'];
     apellido = json['apellido'];
     documento = json['documento'];
@@ -48,10 +39,5 @@ class ficha {
     descripcion = json['descripcion'];
     tipoenvio = json['tipoenvio'];
     idempresa = json['idempresa'];
-    estado = json['estado'];
-    coord_origen = json['coord_origen'];
-    coord_destino = json['coord_destino'];
-    coord_origen = json['totalDistance'];
-    coord_destino = json['totalDuration'];
   }
 }

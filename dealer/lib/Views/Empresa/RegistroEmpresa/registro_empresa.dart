@@ -16,79 +16,47 @@ class RegistroEmpresa extends StatefulWidget {
 class _RegistroEmpresaState extends State<RegistroEmpresa> {
   bool _passwordVisible;
   bool _passwordVisible2;
-  List<String> _distritos = [
-    'Ancón',
-    'Ate Vitarte',
-    'Barranco',
-    'Breña',
-    'Carabayllo',
-    'Chaclacayo',
-    'Chorrillos',
-    'Cieneguilla',
-    'Comas',
-    'El Agustino',
-    'Independencia',
-    'Jesús María',
-    'La Molina',
-    'La Victoria',
-    'Cercado de Lima',
-    'Lince',
-    'Los Olivos',
-    'Lurigancho',
-    'Lurín',
-    'Magdalena del Mar',
-    'Miraflores',
-    'Pachacamac',
-    'Pucusana',
-    'Pueblo Libre',
-    'Puente Piedra',
-    'Punta Hermosa',
-    'Punta Negra',
-    'Rímac',
-    'San Bartolo',
-    'San Borja',
-    'San Isidro',
-    'San Juan de Lurigancho',
-    'San Juan de Miraflores',
-    'San Luis',
-    'San Martín de Porres',
-    'San Miguel',
-    'Santa Anita',
-    'Santa María del Mar',
-    'Santa Rosa',
-    'Santiago de Surco',
-    'Surquillo',
-    'Villa El Salvador',
-    'Villa María del Triunfo'
-  ];
   String _distrito = "";
 
   bool _checked;
 
   final _formRegistroEmpresa = GlobalKey<FormState>();
-  TextEditingController nombre;
+
+  TextEditingController nombre_comercial;
   TextEditingController razon;
-  TextEditingController correo;
   TextEditingController ruc;
+  TextEditingController correo;
   TextEditingController direccion;
-  TextEditingController interior;
+  TextEditingController cantidad;
   TextEditingController celular;
   TextEditingController pass1;
   TextEditingController pass2;
+  TextEditingController resena;
+  String tipo;
+  String terminos;
+  TextEditingController id_distrito;
+  String estado_cuenta;
+
   @override
   void initState() {
     _passwordVisible = false;
     _passwordVisible2 = false;
     _checked = false;
-    nombre = new TextEditingController();
+
+    nombre_comercial = new TextEditingController();
     razon = new TextEditingController();
-    correo = new TextEditingController();
     ruc = new TextEditingController();
+    correo = new TextEditingController();
     direccion = new TextEditingController();
-    interior = new TextEditingController();
+    cantidad = new TextEditingController();
     celular = new TextEditingController();
     pass1 = new TextEditingController();
     pass2 = new TextEditingController();
+    resena = new TextEditingController();
+    tipo = "0";
+    terminos = "0";
+    id_distrito = new TextEditingController();
+    estado_cuenta = "0";
     super.initState();
   }
 
@@ -135,11 +103,12 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                 Row(
                   children: [
                     Flexible(
-                      flex: 7,
+                      flex: 3,
                       child: Container(
                         margin: EdgeInsets.only(right: 10),
                         child: TextFormField(
-                          controller: nombre,
+                          controller: nombre_comercial,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: kPrimaryColor),
@@ -153,27 +122,32 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                         ),
                       ),
                     ),
+
+
                     Flexible(
-                      flex: 5,
+                      flex: 2,
                       child: Container(
                         margin: EdgeInsets.only(left: 10),
                         child: TextFormField(
                           textAlign: TextAlign.center,
-                          controller: ruc,
+                          controller: cantidad,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: kPrimaryColor),
                             ),
-                            hintText: "RUC",
+                            hintText: "Num.Envios.Aprox",
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-                          validator: (value) {
-                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=11?'Son 11 Dígitos':null;
-                          },
                         ),
                       ),
                     ),
+
+
+
+
+
+
                   ],
                 ),
                 SizedBox(
@@ -198,7 +172,58 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                 Row(
                   children: [
                     Flexible(
-                      flex: 8,
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: ruc,
+                          keyboardType: TextInputType.number,
+                          maxLength: 11,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "RUC",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=11?'Son 11 Dígitos':null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: celular,
+                          maxLength: 9,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kPrimaryColor),
+                            ),
+                            hintText: "CELULAR",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          validator: (value) {
+                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=9?'Son 9 Dígitos':null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
                       child: Container(
                         margin: EdgeInsets.only(right: 10),
                         child: TextFormField(
@@ -213,24 +238,6 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                           validator: (value) {
                             return value.isEmpty ? 'Campo Obligatorio' : null;
                           },
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 4,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: TextFormField(
-                          textAlign: TextAlign.center,
-                          controller: interior,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: kPrimaryColor),
-                            ),
-                            hintText: "Int.(opcional)",
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
                         ),
                       ),
                     ),
@@ -254,7 +261,7 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                     iconSize: 40,
                     iconEnabledColor: kPrimaryColor,
                     value: _distrito == "" ? null : _distrito,
-                    items: _distritos.map((String value) {
+                    items: miDistrito.map((String value) {
                       return new DropdownMenuItem<String>(
                         value: value,
                         child: Center(
@@ -283,14 +290,16 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                 SizedBox(
                   height: 10,
                 ),
+
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Flexible(
-                      flex: 7,
                       child: Container(
-                        margin: EdgeInsets.only(right: 10),
                         child: TextFormField(
                           controller: correo,
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: kPrimaryColor),
@@ -299,28 +308,7 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
                           validator: (value) {
-                            return value.isEmpty ? 'Campo Obligatorio' : null;
-                          },
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 5,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: TextFormField(
-                          textAlign: TextAlign.center,
-                          controller: celular,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: kPrimaryColor),
-                            ),
-                            hintText: "CELULAR",
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                          validator: (value) {
-                            return value.isEmpty ? 'Campo Obligatorio' : !RegExp(r"^([0-9])*$").hasMatch(value)?'Solo números': value.length!=9?'Son 9 Dígitos':null;
+                            return value.isEmpty ? 'Campo Obligatorio' : RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)?null:'Correo no válido';
                           },
                         ),
                       ),
@@ -330,6 +318,7 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                 SizedBox(
                   height: 10,
                 ),
+
                 TextFormField(
                   keyboardType: TextInputType.text,
                   controller: pass1,
@@ -418,6 +407,11 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
                     onChanged: (bool value) {
                       setState(() {
                         _checked = value;
+                        if(_checked){
+                          terminos = "1";
+                        }else{
+                          terminos = "0";
+                        }
                       });
                     },
                     activeColor: kPrimaryColor,
@@ -462,40 +456,61 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
   }
 
   Future registrarEmpresa() async {
+
+
+
+    print("nombre_comercial : ${nombre_comercial.text}");
+    print("razon : ${razon.text}");
+    print("ruc : ${ruc.text}");
+    print("correo : ${correo.text}");
+    print("direccion : ${direccion.text}");
+    print("cantidad : ${cantidad.text}");
+    print("celular : ${celular.text}");
+    print("pass1 : ${pass1.text}");
+    print("pass2 : ${pass2.text}");
+    print("resena : ${resena.text==""?"Sin reseña":resena.text}");
+    print("tipo : ${tipo}");
+    print("terminos : ${terminos}");
+    print("id_distrito : ${miDistrito.indexOf(_distrito) + 1}");
+    print("estado_cuenta : ${estado_cuenta}");
+    print("_distrito : ${_distrito}");
+
+
     var url = Uri.parse(
         'https://dealertesting.000webhostapp.com/App_modulos_empresa/App_registrar_empresa.php');
     var response = await http.post(url, body: {
-      'comercial': nombre.text,
-      'ruc': ruc.text,
-      'razon': razon.text,
-      'direccion': direccion.text,
-      'interior': interior.text==""?"0":interior.text,
-      'distrito': "${_distritos.indexOf(_distrito) + 1}",
-      'correo': correo.text,
-      'celular': celular.text,
-      'passw': pass1.text,
-      'tipo': '1',
-      'status': '0'
+      'nombre_comercial' : nombre_comercial.text,
+      'razon' : razon.text,
+      'ruc' : ruc.text,
+      'correo' : correo.text,
+      'direccion' : direccion.text,
+      'cantidad' : cantidad.text,
+      'celular' : celular.text,
+      'pass' : pass1.text,
+      'resena' : resena.text==""?"Sin reseña":resena.text,
+      'tipo' : tipo,
+      'terminos' : terminos,
+      'id_distrito' : "${miDistrito.indexOf(_distrito) + 1}",
+      'estado_cuenta' : estado_cuenta
     });
 
-    print(response.body=='false'?'null':'tiene contenido');
-    print(response.body);
 
-    var data = response.body!='false'?json.decode(response.body):{'0' : "-1"};
-    switch ("${data['0']}") {
+    var data = response.body==""?{'0':'-1'}:json.decode(response.body);
+    print(data);
+    print("${data['0']}");
+
+    switch("${data['0']}"){
       case "0":
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                "No se pudo registrar \nMotivo: El correo ya ha sido registrado"),
+            content: Text("No se pudo registrar \nMotivo: El correo ya ha sido registrado"),
           ),
         );
         break;
       case "1":
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                "Registro exitoso!.\nSe enviará un correo en los próximos minutos."),
+            content: Text("Registro exitoso!.\nSe enviará un correo en los próximos minutos."),
           ),
         );
         Timer(Duration(seconds: 1),
@@ -505,12 +520,12 @@ class _RegistroEmpresaState extends State<RegistroEmpresa> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 10),
-            content:
-            Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
+            content: Text("Ocurrió algo inesperado\n Motivo: Error del Servidor"),
           ),
         );
         break;
     }
+
 
 
   }

@@ -2,6 +2,7 @@ import 'package:dealer/Views/Empresa/Envios/Components/popup.dart';
 import 'package:dealer/Views/Empresa/Envios/Components/popup_body.dart';
 import 'package:dealer/Views/Empresa/Envios/Components/popup_content.dart';
 import 'package:dealer/constats.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Envios extends StatefulWidget {
@@ -12,116 +13,54 @@ class Envios extends StatefulWidget {
 class _EnviosState extends State<Envios> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 10),
-          child: Column(
-            children: [
-              Text("Seleccionar",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
-              Text("Tipo de Servicio",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),)
-            ],
-          ),
-        ),
 
-        Container(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(width: 1.0,color: kSecondaryColor,),
-            boxShadow: [
-              BoxShadow(
-                color: kSecondaryColor.withOpacity(1),
-                spreadRadius: 1,
-                blurRadius: 2,
-                offset: Offset(3, 3), // changes position of shadow
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: ListView(
+        children: [
+          SizedBox(height: 40,),
+          Center(child: Text("Elige el tipo de Servicio",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),)),
+
+          SizedBox(height: 10,),
+          Center(child: Text("Que más te conviene",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),)),
+          SizedBox(height: 20,),
+          for(var item in tiposDeEnvio)
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(width: 1.0,color: kSecondaryColor,),
+                boxShadow: [
+                  BoxShadow(
+                    color: kSecondaryColor.withOpacity(1),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(3, 3), // changes position of shadow
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: ListTile(
-            leading: Image.asset("assets/icons/icon_moto.png", width: 60.0,),
-            title: Text("Express",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-            subtitle: Column(
-              children: [
-                Text("Recogemos tus paquetes y los enviamos a todo Lima y Callao el mismo día."),
-                Text("Tiempo de Servicio: 3 horas",)
-              ],
-            ),
-            dense: true,
-            onTap: (){
-              showPopup(context, PopUpBody(tipo:"Express"),"CREA UN ENVIO EXPRESS");
-            },
-          ),
-        ),
-
-        Container(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(width: 1.0,color: kSecondaryColor,),
-            boxShadow: [
-              BoxShadow(
-                color: kSecondaryColor.withOpacity(1),
-                spreadRadius: 1,
-                blurRadius: 2,
-                offset: Offset(3, 3), // changes position of shadow
+              child: ListTile(
+                leading: Image.asset("${item['icon']}", width: 60.0,),
+                title: Text("${item['tipo']}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                subtitle: Column(
+                  children: [
+                    Container(margin: EdgeInsets.symmetric(vertical: 6),child: Text("${item['text']}",style: TextStyle(fontSize: 14),)),
+                    Text("${item['tiempo']}",),
+                  ],
+                ),
+                dense: false,
+                onTap: (){
+                  showPopup(context, PopUpBody(tipo:"${item['tipo']}"),"CREA UN ENVIO EXPRESS");
+                },
               ),
-            ],
-          ),
-          child: ListTile(
-            leading: Image.asset("assets/icons/icon_tipo2.png", width: 60.0,),
-            title: Text("SAME DAY",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-            subtitle: Column(
-              children: [
-                Text("Recogemos tus paquetes y los enviamos a todo Lima y Provincias."),
-                Text("Tiempo de Servicio: 42 horas",)
-              ],
             ),
-            dense: true,
-            onTap: (){
-              showPopup(context, PopUpBody(tipo:"SAME DAY"),"CREA UN ENVIO SAME DAY");
-            },
-          ),
-        ),
-
-        Container(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(width: 1.0,color: kSecondaryColor,),
-            boxShadow: [
-              BoxShadow(
-                color: kSecondaryColor.withOpacity(1),
-                spreadRadius: 1,
-                blurRadius: 2,
-                offset: Offset(3, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ListTile(
-            leading: Image.asset("assets/icons/icon_tipo3.png", width: 60.0,),
-            title: Text("Next Day",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-            subtitle: Column(
-              children: [
-                Text("Recogemos tus paquetes en la puerta de tu casa y los entregamos en un punto."),
-                Text("Tiempo de Servicio: 24 horas",)
-              ],
-            ),
-            dense: true,
-            onTap: (){
-              showPopup(context, PopUpBody(tipo:"Next Day"),"CREA UN ENVIO NEXT DAY");
-
-            },
-          ),
-        ),
-      ],
+        ],
+      ),
     );
+
   }
 
 

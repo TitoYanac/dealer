@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dealer/Views/Condutor/Pendientes/Components/tablaPendientes.dart';
 import 'package:dealer/Views/Condutor/Pendientes/Components/tablaRealizados.dart';
+import 'package:dealer/constats.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,19 +56,46 @@ class _PendientesState extends State<Pendientes> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: ConseguirDatos(),
-        builder: (context,snapshot){
-      if(snapshot.connectionState == ConnectionState.done){
-        return Text("${snapshot.data}");
+        builder: (context,response){
+      if(response.connectionState == ConnectionState.done){
+        //return Container( child: Text("${response.data}"),);
+        if (response.data == null ) {
+          return Container(
+            child: Center(
+                child: Text(
+                  "NO HAY ENVÍOS PENDIENTES",
+                  style: TextStyle(fontSize: 24, color: kPrimaryColor),
+                )),
+          );
+        } else {
+          return Container();
+        }
+        /*
+        *
+        var data = json.decode(response.data.body);
+
+        if (data[0]['FALSE'] != null && data[0]['FALSE'] == '0') {
+          return Container(
+            child: Center(
+                child: Text(
+                  "NO HAY ENVÍOS DISPONIBLES",
+                  style: TextStyle(fontSize: 24, color: kPrimaryColor),
+                )),
+          );
+        } else {
+          return Container();
+        }
+        * */
       }else{
         return CircularProgressIndicator();
       }
     });
   }
 
-  ConseguirDatos() async {
-    var url = Uri.parse('https://dealertesting.000webhostapp.com/conductor/Mostrar_EnviosPendientes.php');
+  Future ConseguirDatos() async {
+    var url = Uri.parse('https://dealertesting.000webhostapp.com/App_modulos_conductor/App_mostrar_envios_en_proceso.php');
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var response = http.post(url, body: { 'idConductor': preferences.getStringList('miUsuario') });
+    var response = http.post(url, body: { 'id_Conductor': preferences.getStringList('miUsuario') });
     print(response);
     return response;
   }

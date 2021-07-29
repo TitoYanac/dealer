@@ -51,9 +51,9 @@ class _LoginState extends State<Login> {
           children: [
             Image.asset(img1, width: double.infinity),
             Positioned(
-              bottom: 40.0,
+              bottom: 50.0,
               child: Container(
-                height: 400,
+                height: 440,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(horizontal: 40.0),
                 child: Form(
@@ -374,10 +374,10 @@ class _LoginState extends State<Login> {
 
     switch (tipo) {
       case '0':
-        Navigator.of(context).pushNamed('/principal_conductor', arguments: '0');
+        Navigator.of(context).pushNamed('/principal_empresa', arguments: '0');
         break;
       case '1':
-        Navigator.of(context).pushNamed('/principal_empresa', arguments: '0');
+        Navigator.of(context).pushNamed('/principal_conductor', arguments: '0');
         break;
       case '-2':
         ScaffoldMessenger.of(context).showSnackBar(
